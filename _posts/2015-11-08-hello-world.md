@@ -21,10 +21,12 @@ But of no vail. Some error like below kept bugging me.
 jekyll 2.4.0 | Error:  wrong argument type nil (expected String)
 ```
 
-I didn't know any Ruby and had no idea where to start from. 
+When I was running it on Jekyll 3.0, it was working fine, but some plugin 
+requires Jekyll 2.4. I didn't know any Ruby and had no idea where to start from. 
 In the end, I admitted defeat. I accepted the default layout scheme and
 kept on blogging. This is nothing uncommon in software engineering,
 dependency hell is always around, at least it won't disappear until I gain
-a good understanding of the operating system and the underlying software.
+a good understanding of operating system and the underlying software.
+(This might be an interesting example of NULL pointer exception)
 
 So, I starts blogging.
