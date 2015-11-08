@@ -15,7 +15,7 @@ good; one thing that's missing is originality.
 
 I have been tweaking with [Jekyll](http://jekyllrb.com/), the engine that powers this blog, for
 the entire day, without using its default layout as it looks like now. 
-But of no vail. Some error like below kept bugging me.
+But to no avail. Some error like the one below kept bugging me.
 
 ```
 jekyll 2.4.0 | Error:  wrong argument type nil (expected String)
@@ -29,4 +29,4 @@ dependency hell is always around, at least it won't disappear until I gain
 a good understanding of operating system and the underlying software.
 (This might be an interesting example of NULL pointer exception)
 
-So, I starts blogging.
+So, I start blogging.
