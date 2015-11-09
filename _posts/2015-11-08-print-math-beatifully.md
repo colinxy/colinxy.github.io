@@ -6,9 +6,6 @@ categories: software-installation
 ---
 
 
-Print Math Beautifully
-======================
-
 Thanks to python module [sympy](http://www.sympy.org/en/index.html) and instructions from [this blog](http://gastonsanchez.com/blog/opinion/2014/02/16/Mathjax-with-jekyll.html), 
 I can now render math equations in this blog. 
 

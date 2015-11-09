@@ -5,8 +5,6 @@ date:   2015-11-08
 categories: random-thoughts
 ---
 
-Hello World
-===========
 
 After so much hassle, I finally got my blog up and running,
 but I didn't have the triumphant feeling for someone who has achieved
