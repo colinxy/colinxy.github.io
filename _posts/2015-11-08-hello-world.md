@@ -2,7 +2,7 @@
 layout: post
 title:  Hello World
 date:   2015-11-08
-categories: random thoughts
+categories: random-thoughts
 ---
 
 Hello World
