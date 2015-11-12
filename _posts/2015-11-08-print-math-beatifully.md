@@ -15,17 +15,55 @@ I will try to reconstruct the process for your reference. _**NOTICE:**_
 The following instructions are for blogs powered by Jekyll, 
 if this does not applies to you, you may want to seek help elsewhere.
 
-I first generate latex code from python code in sympy with the ```sympy.printing.latex.latex``` function, 
-and then paste the code onto my blog markdown source code and enclose them with 
-either ```<span></span>``` or ```<div></div>```. For python sympy module, install it 
+The following steps I am trying to explain is just to one solution to rendering
+math expressions. There are many choices out there with options like MathJax or
+MathML, but the general idea for my approach is first generate LaTeX from plain
+math expressions and then convert LaTeX to MathJax, which could be rendered in
+most major browsers.
+
+The outline is illustrated in the following diagram.
+
+```
+                   Python            LaTeX to
+                   sympy             MathJax
+                   module            js library
+Math Expressions  ========>  LaTeX  ============>  MathJax  ==>  rendered 
+                                                                on browser
+```
+
+For those of you who already know how to write in LaTeX, you can totally skip the 
+following paragraph. It's just for people like me who are too lazy to learn
+LaTeX.
+
+The first step is to generate LaTeX code. Thanks to Python sympy, 
+a module for doing symbolic math, I can totally rely on the skills that I currently have.
+The ```sympy.printing.latex.latex``` function convert any sympy expression to LaTex.
+I can then copy and paste the code onto my blog markdown source code and enclose them with 
+either ```<span>$$ (LaTeX here) $$</span>``` or ```<div>$$ (LaTeX here) $$</div>```. 
+
+For python sympy module, install it 
 with ```python -m pip install sympy```. If you don't know what python or pip is,
-follow my python tutorial later in my blog.
+check out my python tutorial later in my blog.
 
-Then there are only two more things to set up in my jekyll blog -- 
-change the markdown rendering machine to redcarpet and include the MathJax library.
-For this part, please refer to the blog I have referred to above, its explanation
-is much more detailed than mine.
+Now that you have latex code for your math expression, there are only two more things to set up.
 
+- change the markdown rendering machine to redcarpet. 
+  the following line to your ```_config.yml``` file.
+
+```
+markdown: redcarpet
+```
+
+
+- include the MathJax library. In this case, you
+  have to use HTML tags, add the following line at the end of the markdown file.
+
+```
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+```
+
+
+</br>
 The following math expression ```Integral(exp(-x**2))```
 can be rendered as
 <div>
@@ -33,6 +71,6 @@ $$ \\int e^{- x^{2}}\\, dx $$
 </div>
 
 Please go to my [source code](https://github.com/colinxy/colinxy.github.io/blob/master/_posts/2015-11-08-print-math-beatifully.md)
-to see how it is actually done
+to see how it is actually done.
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
