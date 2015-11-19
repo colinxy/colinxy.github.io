@@ -8,7 +8,6 @@ About Me
 ========
 
 I am an undergraduate student majoring in Computer Science.
-As you would suppose, my blog will be a little technical.
 
 
 About the Blog

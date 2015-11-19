@@ -37,18 +37,18 @@ LaTeX.
 
 The first step is to generate LaTeX code. Thanks to Python sympy, 
 a module for doing symbolic math, I can totally rely on the skills that I currently have.
-The ```sympy.printing.latex.latex``` function convert any sympy expression to LaTex.
+The `sympy.printing.latex.latex` function convert any sympy expression to LaTex.
 I can then copy and paste the code onto my blog markdown source code and enclose them with 
-either ```<span>$$ (LaTeX here) $$</span>``` or ```<div>$$ (LaTeX here) $$</div>```. 
+either `<span>$$ (LaTeX here) $$</span>` or `<div>$$ (LaTeX here) $$</div>`. 
 
 For python sympy module, install it 
-with ```python -m pip install sympy```. If you don't know what python or pip is,
+with `python -m pip install sympy`. If you don't know what python or pip is,
 check out my python tutorial later in my blog.
 
 Now that you have latex code for your math expression, there are only two more things to set up.
 
 - change the markdown rendering machine to redcarpet. 
-  the following line to your ```_config.yml``` file.
+  the following line to your `_config.yml` file.
 
 ```
 markdown: redcarpet
@@ -64,7 +64,7 @@ markdown: redcarpet
 
 
 </br>
-The following math expression ```Integral(exp(-x**2))```
+The following math expression `Integral(exp(-x**2))`
 can be rendered as
 <div>
 $$ \\int e^{- x^{2}}\\, dx $$
