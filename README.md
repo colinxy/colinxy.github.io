@@ -1,1 +1,1 @@
-My Blog
+[My Blog](http://colinxy.github.io)
