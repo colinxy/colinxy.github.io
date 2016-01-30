@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Setting up powerline on bash, vim and emacs
+title:  Setting up powerline for bash, vim and emacs
 date:   2016-1-30
 categories: software-installation
 ---

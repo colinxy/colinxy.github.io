@@ -6,14 +6,24 @@ categories: software-installation
 ---
 
 
-Thanks to python module [sympy](http://www.sympy.org/en/index.html) and instructions from [this blog](http://gastonsanchez.com/blog/opinion/2014/02/16/Mathjax-with-jekyll.html), 
-I can now render math equations in this blog. 
+Update 2016-1-30:
 
-I know perfectly well the struggle that one has to go through to set up everything perfectly.
-Yet how reluctant one is when prompted to repeat the painful struggle.
-I will try to reconstruct the process for your reference. _**NOTICE:**_
-The following instructions are for blogs powered by Jekyll, 
-if this does not applies to you, you may want to seek help elsewhere.
+I realized that the link to a another blog is no longer
+working, and that some of the content may not be explained
+clearly. I will try to address these issues with this update
+
+<br>
+
+Thanks to python module [sympy](http://www.sympy.org/en/index.html)
+and instructions from [this blog](http://gastonsanchez.com/opinion/2014/02/16/Mathjax-with-jekyll/),
+I can now render math equations in this blog.
+
+I know perfectly well the struggle that one has to go through to
+set up everything perfectly. Yet how reluctant one is when prompted
+to repeat the painful struggle. I will try to reconstruct the process
+for your reference. _**NOTICE:**_ The following instructions are for
+blogs powered by Jekyll, if this does not applies to you, you may want
+to seek help elsewhere.
 
 The following steps I am trying to explain is just to one solution to rendering
 math expressions. There are many choices out there with options like MathJax or
@@ -27,27 +37,27 @@ The outline is illustrated in the following diagram.
                    Python            LaTeX to
                    sympy             MathJax
                    module            js library
-Math Expressions  ========>  LaTeX  ============>  MathJax  ==>  rendered 
+Math Expressions  ========>  LaTeX  ============>  MathJax  ==>  rendered
                                                                 on browser
 ```
 
-For those of you who already know how to write in LaTeX, you can totally skip the 
+For those of you who already know how to write in LaTeX, you can totally skip the
 following paragraph. It's just for people like me who are too lazy to learn
 LaTeX.
 
-The first step is to generate LaTeX code. Thanks to Python sympy, 
+The first step is to generate LaTeX code. Thanks to Python sympy,
 a module for doing symbolic math, I can totally rely on the skills that I currently have.
 The `sympy.printing.latex.latex` function convert any sympy expression to LaTex.
-I can then copy and paste the code onto my blog markdown source code and enclose them with 
-either `<span>$$ (LaTeX here) $$</span>` or `<div>$$ (LaTeX here) $$</div>`. 
+I can then copy and paste the code onto my blog markdown source code and enclose them with
+either `<span>$$ (LaTeX here) $$</span>` or `<div>$$ (LaTeX here) $$</div>`.
 
-For python sympy module, install it 
+For python sympy module, install it
 with `python -m pip install sympy`. If you don't know what python or pip is,
 check out my python tutorial later in my blog.
 
 Now that you have latex code for your math expression, there are only two more things to set up.
 
-- change the markdown rendering machine to redcarpet. 
+- change the markdown rendering machine to redcarpet.
   the following line to your `_config.yml` file.
 
 ```
