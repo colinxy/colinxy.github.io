@@ -1,7 +1,9 @@
+# debug
+
 # Site settings
 title: COLINXY
 # description: > # this means to ignore newlines until "baseurl:"
-#   All posts and <a href="https://github.com/colinxy/colinxy.github.io">source code</a> 
+#   All posts and <a href="https://github.com/colinxy/colinxy.github.io">source code</a>
 #   are under MIT license, which you could
 #   freely distribute, but please attribute them to the author
 baseurl: "" # the subpath of your site, e.g. /blog/
