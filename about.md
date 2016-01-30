@@ -9,7 +9,7 @@ About Me
 
 I am an undergraduate student majoring in Computer Science.
 
-Here are a few of my preference to give you an idea of who I am:
+Here are a few of my preferences to give you an idea of who I am:
 
 - I prefer Python to Javascipt.
 - I prefer C++ to Java.
