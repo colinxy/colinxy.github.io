@@ -15,6 +15,13 @@ Here are a few of my preferences to give you an idea of who I am:
 - I prefer C++ to Java.
 - I prefer emacs to vim.
 
+Since I still fairly young, both options of the above categories are
+open to me. I would like to maintain a [history]({{ site.baseurl }}/preferences)
+of how my preferences change over time. Hopefully, it would be
+of interest to both readers and the future me.
+
+
+<br>
 
 About the Blog
 ==============

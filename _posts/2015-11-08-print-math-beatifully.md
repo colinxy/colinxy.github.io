@@ -1,16 +1,18 @@
 ---
 layout: post
-title: Print Math Beautifully
+title:  Print Math Beautifully
 date:   2015-11-08
 categories: software-installation
 ---
 
 
-Update 2016-1-30:
+*Update 2016-1-30:*
 
 I realized that the link to a another blog is no longer
 working, and that some of the content may not be explained
-clearly. I will try to address these issues with this update
+clearly. I will try to address these issues with this update.
+
+- fix
 
 <br>
 
@@ -42,8 +44,8 @@ Math Expressions  ========>  LaTeX  ============>  MathJax  ==>  rendered
 ```
 
 For those of you who already know how to write in LaTeX, you can totally skip the
-following paragraph. It's just for people like me who are too lazy to learn
-LaTeX.
+following paragraph on installing python sympy. It's just for people like me
+who are too lazy to learn LaTeX.
 
 The first step is to generate LaTeX code. Thanks to Python sympy,
 a module for doing symbolic math, I can totally rely on the skills that I currently have.
@@ -51,22 +53,23 @@ The `sympy.printing.latex.latex` function convert any sympy expression to LaTex.
 I can then copy and paste the code onto my blog markdown source code and enclose them with
 either `<span>$$ (LaTeX here) $$</span>` or `<div>$$ (LaTeX here) $$</div>`.
 
-For python sympy module, install it
-with `python -m pip install sympy`. If you don't know what python or pip is,
-check out my python tutorial later in my blog.
+For python sympy module, install it with `python -m pip install sympy`.
+If you don't know what python or pip is, check out my python tutorial
+later in my blog.
 
-Now that you have latex code for your math expression, there are only two more things to set up.
+Now that you have latex code for your math expression, there are only
+two more things to set up.
 
-- change the markdown rendering machine to redcarpet.
-  the following line to your `_config.yml` file.
+- 1. change the markdown rendering machine to redcarpet.
+     Add the following line to your `_config.yml` file.
 
 ```
 markdown: redcarpet
 ```
 
 
-- include the MathJax library. In this case, you
-  have to use HTML tags, add the following line at the end of the markdown file.
+- 2. include the MathJax library. In this case, you
+     have to use HTML tags, add the following line at the end of the markdown file.
 
 ```
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
