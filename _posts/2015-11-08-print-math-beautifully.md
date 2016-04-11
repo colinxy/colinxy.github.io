@@ -10,14 +10,17 @@ categories: software-installation
 
 I realized that the link to a another blog is no longer
 working, and that some of the content may not be explained
-clearly. I will try to address these issues with this update.
+clearly. I will try to address these issues with future update.
 
-- fix
+*Update 2016-4-11:*
+
+Some of the wordings have been fixed and the links are working.
 
 <br>
 
 Thanks to python module [sympy](http://www.sympy.org/en/index.html)
-and instructions from [this blog](http://gastonsanchez.com/opinion/2014/02/16/Mathjax-with-jekyll/),
+and instructions from
+[this blog](http://gastonsanchez.com/opinion/2014/02/16/Mathjax-with-jekyll/),
 I can now render math equations in this blog.
 
 I know perfectly well the struggle that one has to go through to
@@ -31,7 +34,8 @@ The following steps I am trying to explain is just to one solution to rendering
 math expressions. There are many choices out there with options like MathJax or
 MathML, but the general idea for my approach is first generate LaTeX from plain
 math expressions and then convert LaTeX to MathJax, which could be rendered in
-most major browsers.
+most major browsers. One reason for not choosing MathML is that it is not
+supported in chrome.
 
 The outline is illustrated in the following diagram.
 

@@ -12,3 +12,4 @@ permalink: /links/
 
 - [Yunchao Liu](http://yunchaoliu.xyz/wordpress/)
 - [Zhouheng Sun](http://onionhoney.github.io/)
+- [Qianmeng Chen](http://qianmengchen.github.io/blog/)
