@@ -9,16 +9,20 @@ About Me
 
 I am an undergraduate student majoring in Computer Science.
 
-Here are a few of my preferences to give you an idea of who I am:
+I enjoy solving problems on [project euler](https://projecteuler.net/).
+Here is my project euler profile
 
-- I prefer Python to Javascipt.
-- I prefer C++ to Java.
-- I prefer emacs to vim.
+![my project euler profile](https://projecteuler.net/profile/yangxinyu.png)
 
+I maintain a [history of preferences]({{ site.baseurl }}/preferences)
+as they change over time.
 Since I still fairly young, both options of the above categories are
-open to me. I would like to maintain a [history]({{ site.baseurl }}/preferences)
-of how my preferences change over time. Hopefully, it would be
-of interest to both readers and the future me.
+open to me. Hopefully, it would be of interest to both readers and
+the future me.
+
+I remember someone (whom I couldn't recall) once said that he
+could tell personality from a person's emacs configuration.
+So is the case in choice of software or programming languages.
 
 
 <br>
