@@ -29,8 +29,8 @@ indentations take some time to get used to,
 but with emacs handling my parentheses and indentations,
 I can focus more on interesting language features.
 
-One concepting that I have to mention about lisp is the macro system.
-The macro system in lisp is such an interesting concept,
+One thing that I have to mention about lisp is the macro system.
+The macro system in lisp is such an interesting and ubiquitous concept,
 which brings up the concept of `symbol`.
 
 This concept of `symbol` is detached from data, unlike a language
@@ -38,7 +38,9 @@ like Python, where symbol is just the name of a variable (identifier),
 and usage of a symbol is analogous to its value.
 I think answers from
 [this stack overflow question](http://stackoverflow.com/q/8846628/5478848)
-does clarify a bit.
+does clarify a bit. But of course, I want you to read my article,
+where I compare and contrast several features to give you a
+better idea of symbols in Lisp.
 
 ### Symbol: 'literal ###
 
@@ -75,7 +77,7 @@ The following code illustrates the idea of symbols.
 (defvar a 1)
 a                 ; 1    (value)
 'a                ; A    (symbol)
-(symbol-name 'a)  ; "A"  (symbol name of a)
+(symbol-name 'a)  ; "A"  (a string, symbol name of a)
 (boundp 'a)       ; T    (true, symbol a is bounded to a value)
 (fboundp 'a)      ; NIL  (not true, symbol a is not bounded to a function)
 ```
@@ -102,8 +104,8 @@ from its value (or function, if the symbol can be appied in a function call).
 
 In lisp, `lambda` macro creates an anonymous function. Anonymous
 functions are common in modern languages, thanks to this legacy
-from Lisp.
-But occasionally a sharp quote sign is added before the function.
+from Lisp. But it's more complicated in Lisp itself.
+Occasionally a sharp quote sign is added before the function.
 The question is, what difference does it make.
 
 ```cl
@@ -144,6 +146,7 @@ function value.
 (defun foo ()
   1)
 
+(foo)            ; 1  (result of function application)
 (fboundp 'foo)   ; T  (true, symbol foo is bounded to a function value)
 
 foo              ; ERROR, variable FOO is unbound
@@ -151,7 +154,10 @@ foo              ; ERROR, variable FOO is unbound
 (function foo)   ; #<FUNCTION FOO>
 ```
 
-Directly referencing `foo` will cause it to be looked up in the
+Putting `foo` at the first element of the list will cause the function
+to be applied, thereby producing the result 1.
+
+However, directly referencing `foo` will cause it to be looked up in the
 variable namespace,
 but because foo only has a function value and
 only exists in the function namespace, it produce an error.
@@ -180,7 +186,7 @@ and functions in different namespaces.
 It is worthy to note that `function` here does not look like a normal
 function. Because if it were, `foo` would have been evaluated,
 causing an error (`foo` does not exist in variable namespace).
-It is similar to symbols like `defun` or `lambda` where the arguments
+`function` is similar to symbols like `defun` or `lambda` where the arguments
 after it are specially treated (not yet evaluated), which makes me
 speculate it is some kind of macro or special-form.
 But my current knowledge of Lisp is not sufficient enough to answer
