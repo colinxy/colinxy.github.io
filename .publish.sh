@@ -13,7 +13,7 @@ echo "currently on '$branch' branch"
 
 # cleanup, keep only $KEEP in master branch
 KEEP=".git .gitignore .nojekyll README.md .publish.sh"
-find . -maxdepth 1 ! -name '.git' ! -name '.gitignore' ! -name '.nojekyll' ! -name 'README.md' ! -name '.publish.sh'  -print
+find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.gitignore' ! -name '.nojekyll' ! -name 'README.md' ! -name '.publish.sh'  -print
 
 # mv files from _site to root level
 SITE=_site
