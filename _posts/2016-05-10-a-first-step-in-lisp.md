@@ -3,6 +3,7 @@ layout: post
 title:  A First Step In Lisp
 Date:   2016-05-10
 categories: computer-science
+commentIssueId: 9
 ---
 
 

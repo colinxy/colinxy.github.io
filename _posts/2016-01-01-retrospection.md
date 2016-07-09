@@ -3,6 +3,7 @@ layout: post
 title:  Retrospection
 date:   2016-1-1
 categories: random-thoughts
+commentIssueId: 7
 ---
 
 

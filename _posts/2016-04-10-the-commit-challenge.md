@@ -3,6 +3,7 @@ layout: post
 title:  The Commit Challenge
 date:   2016-04-10
 categories: random-thoughts
+commentIssueId: 8
 ---
 
 

@@ -75,11 +75,11 @@ I will not try to make a comprehensive introduction to pointer, but I will make
 this post comparison based, so you can see how concepts are related by yourself.</p>
 
 <p>Because pointer is a very important and complex feature in C/C++, my post may be incomplete or inaccurate,
-please feel free to point it out. 
+please feel free to point it out.
 I researched on the following reference before writing my post</p>
 
 <ul>
-<li><em>The C Programming Language</em>, by Dennis Ritchie, the father of the C language, and Brian Kernighan, </li>
+<li><em>The C Programming Language</em>, by Dennis Ritchie, the father of the C language, and Brian Kernighan,</li>
 <li><em>Absolute C++</em>, by Walter Savitch, the recommended reading for my class,</li>
 <li>wikipedia</li>
 <li><a href="http://www.cplusplus.com/">cplusplus.com</a></li>
@@ -88,7 +88,7 @@ I researched on the following reference before writing my post</p>
 </ul>
 
 <!--
-Most modern programming languages, like Java or Python, have abandoned the use of pointers, 
+Most modern programming languages, like Java or Python, have abandoned the use of pointers,
 which when abused, can cause catastrophic consequences. They instead make use of
 reference, which makes no difference between the reference itself and the variable obtained from dereference.
 -->
@@ -117,20 +117,20 @@ uninitialized pointer will crash the program.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
 <span class="kt">int</span> <span class="n">int_var</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="n">ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">int_var</span><span class="p">;</span>    <span class="c1">// assign the address of int_var to ptr
-</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"the value of the variable the pointer points to: "</span> 
+</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"the value of the variable the pointer points to: "</span>
           <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">ptr</span>  <span class="c1">// dereference ptr: get the value of the variable ptr points to
 </span>          <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"the value of the pointer, an address: "</span> 
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"the value of the pointer, an address: "</span>
           <span class="o">&lt;&lt;</span> <span class="n">ptr</span>   <span class="c1">// get the value of ptr
 </span>          <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"the address of the pointer stored in memory: "</span> 
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"the address of the pointer stored in memory: "</span>
           <span class="o">&lt;&lt;</span> <span class="o">&amp;</span><span class="n">ptr</span>  <span class="c1">// get the address of ptr
 </span>          <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 
 <span class="kt">int</span> <span class="o">*</span><span class="n">uninit_ptr</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Dereferencing an uninitialized pointer"</span>
           <span class="o">&lt;&lt;</span> <span class="s">"will crash the program"</span>
-          <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">uninit_ptr</span>  <span class="c1">// dereference the pointer 
+          <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">uninit_ptr</span>  <span class="c1">// dereference the pointer
 </span>          <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 </code></pre></div>
 <p>In a 64-bit architecture, the size of a pointer
@@ -139,10 +139,10 @@ is irrelevant to the size of the variable it points to. You can get the size of 
 with <code>sizeof</code> function.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="o">*</span><span class="n">int_ptr</span><span class="p">;</span>
 <span class="kt">double</span> <span class="o">*</span><span class="n">double_ptr</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">int_ptr_size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">int_ptr</span><span class="p">),</span> 
+<span class="kt">int</span> <span class="n">int_ptr_size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">int_ptr</span><span class="p">),</span>
     <span class="n">double_ptr_size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">double_ptr</span><span class="p">);</span>  <span class="c1">// should be size_t, but I will use int for simplicity
 </span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"size of int_ptr: "</span> <span class="o">&lt;&lt;</span> <span class="n">int_ptr_size</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span> 
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"size of int_ptr: "</span> <span class="o">&lt;&lt;</span> <span class="n">int_ptr_size</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span>
 <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"size of double_ptr: "</span> <span class="o">&lt;&lt;</span> <span class="n">double_ptr_size</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 
 <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"the size of a pointer that points to an int and "</span> <span class="o">&lt;&lt;</span>
@@ -151,7 +151,7 @@ with <code>sizeof</code> function.</p>
           <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 </code></pre></div>
 <p>The <code>sizeof</code> function (can also be used as a statement) returns the size in bytes of
-the variable in memory. For example, <code>sizeof(int)</code> would return 4 
+the variable in memory. For example, <code>sizeof(int)</code> would return 4
 and <code>sizeof(double)</code> would return 8 on most modern computers. I will talk more
 about sizeof function later in the distinction between pointers and arrays.</p>
 
@@ -189,7 +189,7 @@ by the size of the type that the pointer points to, and in this case, <code>size
 pointer subtraction produce the difference in elements between the elements
 </code></pre></div>
 <p>The difference between a<em>4</em>ptr and a<em>6</em>ptr is <code>2 * sizeof(int)</code>,
-but the subtraction between pointers pointing to the same type produce 
+but the subtraction between pointers pointing to the same type produce
 the difference in elements between the elements.</p>
 
 <!--
@@ -202,7 +202,7 @@ Pointer arithmetic works on the following situations
 -->
 
 <p><small>
-    * please refer to the book Chapter 5 Pointers and Arrays of 
+    * please refer to the book Chapter 5 Pointers and Arrays of
     <em>The C Programming Language</em> by Dennis Ritchie and Brian Kernighan, for a more detailed explanation
 </small></p>
 
@@ -216,7 +216,7 @@ Pointer arithmetic works on the following situations
     ↑
     a
 
-array a is actually the address of the first element 
+array a is actually the address of the first element
 of the array.
 </code></pre></div><div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="cp">#include &lt;cassert&gt;
 </span><span class="n">assert</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="o">*</span> <span class="n">a</span><span class="p">);</span>
@@ -263,8 +263,8 @@ But you cannot reassign arrays.</p>
 <span class="p">}</span>
 </code></pre></div>
 <p>The <code>sizeof</code> function works differently for pointers and arrays.
-You can no longer get the size of the string literal stored in memory with function <code>sizeof</code>. 
-You can only get the size of the pointer itself, 
+You can no longer get the size of the string literal stored in memory with function <code>sizeof</code>.
+You can only get the size of the pointer itself,
 which is either 4 bytes or 8 bytes depending on your architecture.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">charPtr</span> <span class="o">=</span> <span class="s">"hello"</span><span class="p">;</span>
 </code></pre></div><div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">charPtr</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
@@ -286,14 +286,14 @@ The following function will not work. as it will always return the size of point
     <h3><strong><em>Comments</em></strong></h3>
     <div>
       Want to leave a comment? Write your comment
-      <a href="https://github.com/colinxy/colinxy.github.io/issues/">here</a>.
+      <a href="https://github.com/colinxy/colinxy.github.io/issues/6">here</a>.
     </div>
     <div id="comments"></div>
   </div>
 
   <script type="text/javascript">
 
-   var commentIssueId = ;
+   var commentIssueId = 6;
    /* console.log(commentIssueId);*/
 
    function formatComment(user, userUrl, avatar, date, commentUrl, body) {
