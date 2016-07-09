@@ -131,8 +131,46 @@ reluctance to express myself.</p>
   </div>
 
   <script type="text/javascript">
+
    var commentIssueId = ;
    /* console.log(commentIssueId);*/
+
+   function formatComment(user, userUrl, avatar, date, commentUrl, body) {
+     /* header */
+     var commentHeaderAvatar = document.createElement("div");
+     commentHeaderAvatar.innerHTML = "<img src='" + avatar +
+                                     "' width='20' height='20'>";
+     var usr = document.createElement("a"); /* user */
+     usr.href = userUrl;
+     usr.innerHTML = user;
+     var commentHeaderUser = document.createElement("div"); /* user div */
+     commentHeaderUser.class = "commentHeaderUser";
+     commentHeaderUser.appendChild(usr);
+     var dat = document.createElement("a"); /* date */
+     dat.href = commentUrl;
+     dat.innerHTML = date;
+     var commentHeaderDate = document.createElement("div"); /* date div */
+     commentHeaderDate.appendChild(dat);
+
+     var commentHeader = document.createElement("div");
+     commentHeader.class = "commentHeader";
+     commentHeader.appendChild(commentHeaderAvatar).
+                   appendChild(commentHeaderUser).
+                   appendChild(commentHeaderDate);
+
+     /* body */
+     var commentBody = document.createElement("div");
+     commentBody.class = "commentBody";
+     commentBody.innerHTML = body;
+
+     /* comment (header + body) */
+     var comment = document.createElement("div");
+     comment.class = "comment";
+     comment.appendChild(commentHeader).
+             appendChild(commentBody);
+
+     return comment;
+   }
 
    if (commentIssueId) {
      console.log("loading comments...");
@@ -147,7 +185,15 @@ reluctance to express myself.</p>
        var comments = document.getElementById("comments");
 
        for ( var i = 0; i < response.length; i++) {
+         var user = response[i].user.login;
+         var userUrl = response[i].user.html_url;
+         var avatar = response[i].user.avatar_url;
+         var date = new Date(response[i].updated_at).toDateString();
+         var commentUrl = response[i].html_url;
+         var body = response[i].body_html;
 
+         comments.appendChild(formatComment(user, userUrl, avatar,
+                                            date, commentUrl, body));
        }
 
      };
