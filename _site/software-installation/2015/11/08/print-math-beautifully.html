@@ -22,7 +22,7 @@
 
   <div class="wrapper">
 
-    <a class="site-title" href="/">COLINXY</a>
+    <a class="site-title" href="/">Mutable State</a>
 
     <nav class="site-nav">
       <a href="#" class="menu-icon">
@@ -150,6 +150,46 @@ to see how it is actually done.</p>
 
   </article>
 
+  <div>
+    <h3><strong><em>Comments</em></strong></h3>
+    <div>
+      Want to leave a comment? Write your comment
+      <a href="https://github.com/colinxy/colinxy.github.io/issues/">here</a>.
+    </div>
+    <div id="comments"></div>
+  </div>
+
+  <script type="text/javascript">
+   var commentIssueId = ;
+   /* console.log(commentIssueId);*/
+
+   if (commentIssueId) {
+     console.log("loading comments...");
+
+     var url = "https://api.github.com/repos/colinxy/colinxy.github.io/issues/" +
+               commentIssueId + "/comments";
+
+     var request = new XMLHttpRequest();
+     request.onload = function() {
+       var response = JSON.parse(request.responseText);
+       /* console.log(response);*/
+       var comments = document.getElementById("comments");
+
+       for ( var i = 0; i < response.length; i++) {
+
+       }
+
+     };
+     request.error = function() {
+       console.log("error loading comments");
+     };
+
+     request.open('GET', url, true);
+     request.setRequestHeader("Accept", "application/vnd.github.v3.html+json");
+     request.send();
+   }
+  </script>
+
 </div>
 
       </div>
@@ -159,7 +199,7 @@ to see how it is actually done.</p>
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">COLINXY</h2>
+    <h2 class="footer-heading">Mutable State</h2>
 
     <div class="footer-col-wrapper">
       <div class="footer-col  footer-col-1">

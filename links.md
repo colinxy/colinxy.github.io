@@ -17,3 +17,4 @@ permalink: /links/
 - [Zhanghong Hua](http://joshuacnf.com/)
 - [Ray Zhang](https://oneraynyday.github.io/)
 - [Kun Qian](http://kevinkassimo.github.io/)
+- [Yingbo Wang](http://maxwyb.github.io)
