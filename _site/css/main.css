@@ -324,10 +324,13 @@ pre {
   border-bottom-color: #bfccd1; }
 
 .comment-header-user {
-  padding: 15px; }
+  padding: 15px;
+  color: #767676; }
 
 .comment-body {
-  padding: 10px; }
+  padding: 15px;
+  font-family: arial;
+  font-size: 14px; }
 
 /**
  * Syntax highlighting styles

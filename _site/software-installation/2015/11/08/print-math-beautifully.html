@@ -169,11 +169,11 @@ to see how it is actually done.</p>
      var commentHeaderAvatar = document.createElement("span");
      commentHeaderAvatar.innerHTML = "<img src='" + avatar +
                                      "' width='20' height='20'>";
-     var usr = document.createElement("a"); /* user */
-     usr.href = userUrl;
+     var usr = document.createElement("strong"); /* user */
      usr.innerHTML = user;
-     var commentHeaderUser = document.createElement("strong"); /* user div */
+     var commentHeaderUser = document.createElement("a"); /* user div */
      commentHeaderUser.className = "comment-header-user";
+     commentHeaderUser.href = userUrl;
      commentHeaderUser.appendChild(usr);
      var dat = document.createElement("a"); /* date */
      dat.href = commentUrl;
