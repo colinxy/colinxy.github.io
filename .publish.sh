@@ -9,8 +9,8 @@ CURR_PATH=${PWD##*/}
 [ "$BLOG" = "$CURR_PATH" ] ||
     { echo "NOT THE BLOG DIRECTORY" && exit 1; }
 
-
-# git add . && git commit -m 'blog update'
+[ -z "$(git status --short)" ] ||
+    { echo "UNCOMMITTED CHANGES" && exit 1; }
 
 branch=$(git rev-parse --abbrev-ref HEAD)
 printf '\033[0;36m==>\033[0;00m '
