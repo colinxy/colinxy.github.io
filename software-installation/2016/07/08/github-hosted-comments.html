@@ -69,14 +69,68 @@
   </header>
 
   <article class="post-content">
-    <p>This post is based on reference
+    <p>This post is based on the reference
 <a href="http://ivanzuzak.info/2011/02/18/github-hosted-comments-for-github-hosted-blogs.html">here</a>,
-with some personalized customization. Though the reference is somewhat
-outdated, it still offers a feasible way to host comments on github
+with some personalized customizations. Though the reference is somewhat
+outdated, it still offers a feasible way hosting comments on github
 for github based blog.</p>
 
-<p>Content for this blog post will follow shortly.
-No external js library required.</p>
+<p>Comments need to be stored in a database, but for static blog, I have to
+resort to an external host to store them. A popular choice seems to be
+<a href="https://disqus.com/">disqus</a>, a free plugin to your blog that manages
+everything related to comments. But using this plugin would mean that I have
+to host comments separately, something I am reluctant to do.
+Also, I would lose control of how I want to present the comments,
+and miss all the fun tweaking personalized customizations. So when I came
+across <a href="http://ivanzuzak.info/2011/02/18/github-hosted-comments-for-github-hosted-blogs.html">this reference</a>
+aforementioned, I was surprised by its elegance and creativity. It
+immediately became clear to me that this is the right way for me to host
+the comments to my blog.</p>
+
+<p><img src="/res/github_issue.png" alt="github issue">
+<img src="/res/github_comment.png" alt="comments"></p>
+
+<p>The general idea behind this method is to treat each blog as a issue, and
+each blog comment maps to each comment of the corresponding issue.
+Thus, I have to create an issue for each of my blog post and provide
+a link to the issue page. Fortunately, there is a unique id associated
+with each issue, so linking them wouldn&#39;t be a problem. Also to
+inform Jekyll about the id of the issue, simply add the id to
+<a href="http://jekyllrb.com/docs/frontmatter/">YAML front matter block</a>
+of the markdown source. I have used this post itself as an example.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">layout: post
+title:  Add Github Hosted Comments to This Blog
+Date:   2016-07-08
+categories: software-installation
+commentIssueId: 3
+</code></pre></div>
+<p>In this case, I have called this variable <code>commentIssueId</code>.
+This variable will be available to the template system, and therefore
+can be present in the javascript code. It can be accessed as
+<code>page.commentIssueId</code>.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">commentIssueId</span> <span class="o">=</span>  <span class="p">{{</span> <span class="nx">page</span><span class="p">.</span><span class="nx">commentIssueId</span> <span class="p">}}</span> <span class="p">;</span>
+</code></pre></div>
+<p>The next challenge is to present all the comments on my blog.</p>
+
+<p>TODO : finish up this post</p>
+
+<p>ajax</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s2">"https://api.github.com/repos/colinxy/colinxy.github.io/issues/"</span> <span class="o">+</span>
+          <span class="nx">commentIssueId</span> <span class="o">+</span> <span class="s2">"/comments"</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+<span class="nx">request</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">...</span>  <span class="c1">// omitted</span>
+<span class="p">};</span>
+<span class="nx">request</span><span class="p">.</span><span class="nx">error</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">...</span>  <span class="c1">// omitted</span>
+<span class="p">};</span>
+<span class="nx">request</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="nx">request</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s2">"Accept"</span><span class="p">,</span> <span class="s2">"application/vnd.github.v3.html+json"</span><span class="p">);</span>
+<span class="nx">request</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+</code></pre></div>
+<p>For more detail, checkout my code on
+<a href="https://github.com/colinxy/colinxy.github.io/blob/source/_layouts/post.html">github</a>.</p>
 
   </article>
 
