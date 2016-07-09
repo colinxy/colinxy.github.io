@@ -298,37 +298,37 @@ The following function will not work. as it will always return the size of point
 
    function formatComment(user, userUrl, avatar, date, commentUrl, body) {
      /* header */
-     var commentHeaderAvatar = document.createElement("div");
+     var commentHeaderAvatar = document.createElement("span");
      commentHeaderAvatar.innerHTML = "<img src='" + avatar +
                                      "' width='20' height='20'>";
      var usr = document.createElement("a"); /* user */
      usr.href = userUrl;
      usr.innerHTML = user;
-     var commentHeaderUser = document.createElement("div"); /* user div */
-     commentHeaderUser.class = "commentHeaderUser";
+     var commentHeaderUser = document.createElement("strong"); /* user div */
+     commentHeaderUser.className = "comment-header-user";
      commentHeaderUser.appendChild(usr);
      var dat = document.createElement("a"); /* date */
      dat.href = commentUrl;
      dat.innerHTML = date;
-     var commentHeaderDate = document.createElement("div"); /* date div */
+     var commentHeaderDate = document.createElement("span"); /* date div */
      commentHeaderDate.appendChild(dat);
 
      var commentHeader = document.createElement("div");
-     commentHeader.class = "commentHeader";
-     commentHeader.appendChild(commentHeaderAvatar).
-                   appendChild(commentHeaderUser).
-                   appendChild(commentHeaderDate);
+     commentHeader.className = "comment-header";
+     commentHeader.appendChild(commentHeaderAvatar);
+     commentHeader.appendChild(commentHeaderUser);
+     commentHeader.appendChild(commentHeaderDate);
 
      /* body */
      var commentBody = document.createElement("div");
-     commentBody.class = "commentBody";
+     commentBody.className = "comment-body";
      commentBody.innerHTML = body;
 
      /* comment (header + body) */
      var comment = document.createElement("div");
-     comment.class = "comment";
-     comment.appendChild(commentHeader).
-             appendChild(commentBody);
+     comment.className = "comment";
+     comment.appendChild(commentHeader);
+     comment.appendChild(commentBody);
 
      return comment;
    }
@@ -356,7 +356,6 @@ The following function will not work. as it will always return the size of point
          comments.appendChild(formatComment(user, userUrl, avatar,
                                             date, commentUrl, body));
        }
-
      };
      request.error = function() {
        console.log("error loading comments");

@@ -310,6 +310,26 @@ pre {
         font-size: 18px; } }
 
 /**
+ * Comments
+ */
+.comment {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-color: #bfccd1;
+  border: 1px solid #ddd; }
+
+.comment-header {
+  padding: 5px;
+  background-color: #f2f8fa;
+  border-bottom-color: #bfccd1; }
+
+.comment-header-user {
+  padding: 15px; }
+
+.comment-body {
+  padding: 10px; }
+
+/**
  * Syntax highlighting styles
  */
 .highlight {
