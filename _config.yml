@@ -1,10 +1,12 @@
 # debug
 
+exclude: ["README.md"]
+
 # Site settings
 title: Mutable State
 # description: > # this means to ignore newlines until "baseurl:"
 #   All posts and <a href="https://github.com/colinxy/colinxy.github.io">source code</a>
-#   are under MIT license
+#   are released under MIT license
 
 baseurl: "" # the subpath of your site, e.g. /blog/
 github_username:  colinxy
