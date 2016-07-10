@@ -10,11 +10,20 @@ commentIssueId: 3
 This post is based on the reference
 [here](http://ivanzuzak.info/2011/02/18/github-hosted-comments-for-github-hosted-blogs.html),
 with some personalized customizations. Though the reference is somewhat
-outdated, it still offers a feasible way hosting comments on github
+outdated, it still offers a feasible way of hosting comments on github
 for github based blog.
 
-Comments need to be stored in a database, but for static blog, I have to
-resort to an external host to store them. A popular choice seems to be
+Traditional blogs tend to store everything in a database, and
+accessing a particular blog post along with its comments would be
+equivalent to asking the server to make a query on blog database and
+render the resulting HTML file for you.
+However, static blogs like this one store all the posts as static contents,
+and visiting a blog post would be like visiting a public html file on a
+remote server. But since comments are always generated dynamically
+(provided by visitors), managing them statically can be a pain.
+
+Therefore I have to resort to an external host to store comments.
+A popular choice seems to be
 [disqus](https://disqus.com/), a free plugin to your blog that manages
 everything related to comments. But using this plugin would mean that I have
 to host comments separately, something I am reluctant to do.
@@ -24,10 +33,6 @@ across [this reference](http://ivanzuzak.info/2011/02/18/github-hosted-comments-
 aforementioned, I was surprised by its elegance and creativity. It
 immediately became clear to me that this is the right way for me to host
 the comments to my blog.
-
-![github issue](/res/github_issue.png)
-![comments](/res/github_comment.png)
-
 
 The general idea behind this method is to treat each blog as a issue, and
 each blog comment maps to each comment of the corresponding issue.
@@ -55,11 +60,70 @@ can be present in the javascript code. It can be accessed as
 var commentIssueId = {% raw %} {{ page.commentIssueId }} {% endraw %};
 ```
 
+![github issue](/res/github_issue.png)
+*hosting comments as github issues*
+
 The next challenge is to present all the comments on my blog.
+Luckily github has provide us with issue API, which I can pull all
+the comments with an asynchronous javascript call.
+[github issue API](https://developer.github.com/v3/issues/)
+It is easy to form URL for issue API, and in this case, it's
+`https://api.github.com/repos/colinxy/colinxy.github.io/issues/<issue id>`,
+where issue id is the variable `commentIssueId` I have mentioned above.
+Github will respond with a json that easy to parse with javascript
+function `JSON.parse`.
 
-TODO : finish up this post
+An example response looks like this.
 
-ajax
+```json
+{
+    "url": "https://api.github.com/repos/colinxy/colinxy.github.io/issues/comments/231508173",
+    "html_url": "https://github.com/colinxy/colinxy.github.io/issues/3#issuecomment-231508173",
+    "issue_url": "https://api.github.com/repos/colinxy/colinxy.github.io/issues/3",
+    "id": 231508173,
+    "user": {
+        "login": "colinxy",
+        "id": 8478254,
+        "avatar_url": "https://avatars.githubusercontent.com/u/8478254?v=3",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/colinxy",
+        "html_url": "https://github.com/colinxy",
+        "followers_url": "https://api.github.com/users/colinxy/followers",
+        "following_url": "https://api.github.com/users/colinxy/following{/other_user}",
+        "gists_url": "https://api.github.com/users/colinxy/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/colinxy/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/colinxy/subscriptions",
+        "organizations_url": "https://api.github.com/users/colinxy/orgs",
+        "repos_url": "https://api.github.com/users/colinxy/repos",
+        "events_url": "https://api.github.com/users/colinxy/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/colinxy/received_events",
+        "type": "User",
+        "site_admin": false
+    },
+    "created_at": "2016-07-09T01:53:43Z",
+    "updated_at": "2016-07-09T01:54:45Z",
+    "body_html": "<p>test comment.<br>\nComment with <strong>markdown</strong> <em>styling</em></p>"
+}
+```
+
+Since github issue comments come in as markdown, so I also want to be able
+to render markdown in comment box. But Luckily, github provides an option
+to request comments in HTML, saving me a lot of trouble.
+The key is to specify media type in request header asking for
+comments as HTML. Simply supply
+`{Accept: "application/vnd.github.v3.html+json"}`
+in the request header, and github will return the comment body as HTML.
+In the example json response seen above, the `body_html` attribute
+is the comment body, and it is rendered as HTML, not markdown,
+which I can directly insert into the HTML nodes.
+Find more information on github API media type
+[here](https://developer.github.com/v3/media/).
+
+The example javascript code to make AJAX request to github API, without
+jQuery. Since I use a template system to render blog post, I put the
+javascript code in post template under `_layout` folder.
+You can see the full code
+[here](https://github.com/colinxy/colinxy.github.io/blob/source/_layouts/post.html#L24).
 
 ```javascript
 var url = "https://api.github.com/repos/colinxy/colinxy.github.io/issues/" +
@@ -67,15 +131,27 @@ var url = "https://api.github.com/repos/colinxy/colinxy.github.io/issues/" +
 
 var request = new XMLHttpRequest();
 request.onload = function() {
-    ...  // omitted
+    ...  // render comments
 };
 request.error = function() {
-    ...  // omitted
+    ...  // log error
 };
 request.open('GET', url, true);
 request.setRequestHeader("Accept", "application/vnd.github.v3.html+json");
 request.send();
 ```
+
+The last part is to render the comment HTML nodes onto the webpage. Since I am
+working without any external javascript library, I had to manually
+append nodes into HTML documents.
+
+It took some tweaking with HTML and CSS to make comments box look
+somewhat nicer. You can checkout the relevant CSS code
+[here](https://github.com/colinxy/colinxy.github.io/blob/source/_sass/_layout.scss#L241).
+
+![comments](/res/github_comment.png)
+*comments rendered for this blog*
+
 
 For more detail, checkout my code on
 [github](https://github.com/colinxy/colinxy.github.io/blob/source/_layouts/post.html).
