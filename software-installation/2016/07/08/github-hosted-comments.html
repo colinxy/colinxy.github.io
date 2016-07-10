@@ -72,11 +72,20 @@
     <p>This post is based on the reference
 <a href="http://ivanzuzak.info/2011/02/18/github-hosted-comments-for-github-hosted-blogs.html">here</a>,
 with some personalized customizations. Though the reference is somewhat
-outdated, it still offers a feasible way hosting comments on github
+outdated, it still offers a feasible way of hosting comments on github
 for github based blog.</p>
 
-<p>Comments need to be stored in a database, but for static blog, I have to
-resort to an external host to store them. A popular choice seems to be
+<p>Traditional blogs tend to store everything in a database, and
+accessing a particular blog post along with its comments would be
+equivalent to asking the server to make a query on blog database and
+render the resulting HTML file for you.
+However, static blogs like this one store all the posts as static contents,
+and visiting a blog post would be like visiting a public html file on a
+remote server. But since comments are always generated dynamically
+(provided by visitors), managing them statically can be a pain.</p>
+
+<p>Therefore I have to resort to an external host to store comments.
+A popular choice seems to be
 <a href="https://disqus.com/">disqus</a>, a free plugin to your blog that manages
 everything related to comments. But using this plugin would mean that I have
 to host comments separately, something I am reluctant to do.
@@ -86,9 +95,6 @@ across <a href="http://ivanzuzak.info/2011/02/18/github-hosted-comments-for-gith
 aforementioned, I was surprised by its elegance and creativity. It
 immediately became clear to me that this is the right way for me to host
 the comments to my blog.</p>
-
-<p><img src="/res/github_issue.png" alt="github issue">
-<img src="/res/github_comment.png" alt="comments"></p>
 
 <p>The general idea behind this method is to treat each blog as a issue, and
 each blog comment maps to each comment of the corresponding issue.
@@ -110,25 +116,92 @@ can be present in the javascript code. It can be accessed as
 <code>page.commentIssueId</code>.</p>
 <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">commentIssueId</span> <span class="o">=</span>  <span class="p">{{</span> <span class="nx">page</span><span class="p">.</span><span class="nx">commentIssueId</span> <span class="p">}}</span> <span class="p">;</span>
 </code></pre></div>
-<p>The next challenge is to present all the comments on my blog.</p>
+<p><img src="/res/github_issue.png" alt="github issue">
+<em>hosting comments as github issues</em></p>
 
-<p>TODO : finish up this post</p>
+<p>The next challenge is to present all the comments on my blog.
+Luckily github has provide us with issue API, which I can pull all
+the comments with an asynchronous javascript call.
+<a href="https://developer.github.com/v3/issues/">github issue API</a>
+It is easy to form URL for issue API, and in this case, it&#39;s
+<code>https://api.github.com/repos/colinxy/colinxy.github.io/issues/&lt;issue id&gt;</code>,
+where issue id is the variable <code>commentIssueId</code> I have mentioned above.
+Github will respond with a json that easy to parse with javascript
+function <code>JSON.parse</code>.</p>
 
-<p>ajax</p>
+<p>An example response looks like this.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/repos/colinxy/colinxy.github.io/issues/comments/231508173"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"html_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://github.com/colinxy/colinxy.github.io/issues/3#issuecomment-231508173"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"issue_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/repos/colinxy/colinxy.github.io/issues/3"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">231508173</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"colinxy"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">8478254</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"avatar_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://avatars.githubusercontent.com/u/8478254?v=3"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"gravatar_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/users/colinxy"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"html_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://github.com/colinxy"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"followers_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/users/colinxy/followers"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"following_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/users/colinxy/following{/other_user}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"gists_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/users/colinxy/gists{/gist_id}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"starred_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/users/colinxy/starred{/owner}{/repo}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"subscriptions_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/users/colinxy/subscriptions"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"organizations_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/users/colinxy/orgs"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"repos_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/users/colinxy/repos"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"events_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/users/colinxy/events{/privacy}"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"received_events_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.github.com/users/colinxy/received_events"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"site_admin"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-07-09T01:53:43Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-07-09T01:54:45Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"body_html"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;p&gt;test comment.&lt;br&gt;\nComment with &lt;strong&gt;markdown&lt;/strong&gt; &lt;em&gt;styling&lt;/em&gt;&lt;/p&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Since github issue comments come in as markdown, so I also want to be able
+to render markdown in comment box. But Luckily, github provides an option
+to request comments in HTML, saving me a lot of trouble.
+The key is to specify media type in request header asking for
+comments as HTML. Simply supply
+<code>{Accept: &quot;application/vnd.github.v3.html+json&quot;}</code>
+in the request header, and github will return the comment body as HTML.
+In the example json response seen above, the <code>body_html</code> attribute
+is the comment body, and it is rendered as HTML, not markdown,
+which I can directly insert into the HTML nodes.
+Find more information on github API media type
+<a href="https://developer.github.com/v3/media/">here</a>.</p>
+
+<p>The example javascript code to make AJAX request to github API, without
+jQuery. Since I use a template system to render blog post, I put the
+javascript code in post template under <code>_layout</code> folder.
+You can see the full code
+<a href="https://github.com/colinxy/colinxy.github.io/blob/source/_layouts/post.html#L24">here</a>.</p>
 <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s2">"https://api.github.com/repos/colinxy/colinxy.github.io/issues/"</span> <span class="o">+</span>
           <span class="nx">commentIssueId</span> <span class="o">+</span> <span class="s2">"/comments"</span><span class="p">;</span>
 
 <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
 <span class="nx">request</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="p">...</span>  <span class="c1">// omitted</span>
+    <span class="p">...</span>  <span class="c1">// render comments</span>
 <span class="p">};</span>
 <span class="nx">request</span><span class="p">.</span><span class="nx">error</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="p">...</span>  <span class="c1">// omitted</span>
+    <span class="p">...</span>  <span class="c1">// log error</span>
 <span class="p">};</span>
 <span class="nx">request</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 <span class="nx">request</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s2">"Accept"</span><span class="p">,</span> <span class="s2">"application/vnd.github.v3.html+json"</span><span class="p">);</span>
 <span class="nx">request</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
 </code></pre></div>
+<p>The last part is to render the comment HTML nodes onto the webpage. Since I am
+working without any external javascript library, I had to manually
+append nodes into HTML documents.</p>
+
+<p>It took some tweaking with HTML and CSS to make comments box look
+somewhat nicer. You can checkout the relevant CSS code
+<a href="https://github.com/colinxy/colinxy.github.io/blob/source/_sass/_layout.scss#L241">here</a>.</p>
+
+<p><img src="/res/github_comment.png" alt="comments">
+<em>comments rendered for this blog</em></p>
+
 <p>For more detail, checkout my code on
 <a href="https://github.com/colinxy/colinxy.github.io/blob/source/_layouts/post.html">github</a>.</p>
 
