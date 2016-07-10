@@ -38,6 +38,7 @@ git checkout source -- "$SITE"  # blog content on source branch
 # generate site by moving lifting everything in $SITE to blog root level
 find "$SITE" -maxdepth 1 ! -path "$SITE" -exec mv {} . \;
 
+rmdir "$SITE"
 
 echo
 echo "publish success"
