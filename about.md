@@ -43,5 +43,3 @@ open link in new tab if you like.
 
 About the Title
 ==============
-
-Changes are inevitable, and I want to document my change.
