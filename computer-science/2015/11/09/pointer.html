@@ -69,7 +69,14 @@
   </header>
 
   <article class="post-content">
-    <p>Since pointers are about to be covered in my computer science class,
+    <p><em>edit: 2016-7-9</em>:</p>
+
+<p>This article is written when I was in an introductory CS course.
+Some of the inaccurate statements are corrected.</p>
+
+<p><br></p>
+
+<p>Since pointers are about to be covered in my computer science class,
 I would make a post about it, both for my own review, and for your reference.
 I will not try to make a comprehensive introduction to pointer, but I will make
 this post comparison based, so you can see how concepts are related by yourself.</p>
@@ -80,8 +87,6 @@ I researched on the following reference before writing my post</p>
 
 <ul>
 <li><em>The C Programming Language</em>, by Dennis Ritchie, the father of the C language, and Brian Kernighan,</li>
-<li><em>Absolute C++</em>, by Walter Savitch, the recommended reading for my class,</li>
-<li>wikipedia</li>
 <li><a href="http://www.cplusplus.com/">cplusplus.com</a></li>
 <li><a href="http://en.cppreference.com/w/">cppreference.com</a></li>
 <li><a href="http://cslibrary.stanford.edu/106/">This article on pointers</a></li>
@@ -111,9 +116,9 @@ memory address:       0xABCD                      0xBCDE
 value:                0xBCDE                      1 (int)
 </code></pre></div>
 <p>A pointer is a variable whose value is the address of the variable it points to.
-We can get the address of a variable with the <em>addressof</em> operator <strong>&amp;</strong>, and get the value of the
-variable it points to with the <em>dereferencing</em> operator <strong>*</strong> . Dereferencing an
-uninitialized pointer will crash the program.</p>
+We can get the address of a variable with the <em>addressof</em> operator <code>&amp;</code>, and get the value of the
+variable it points to with the <em>dereferencing</em> operator <code>\</code> . Dereferencing an
+uninitialized pointer causes <em>undefined behavior</em>.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
 <span class="kt">int</span> <span class="n">int_var</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="n">ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">int_var</span><span class="p">;</span>    <span class="c1">// assign the address of int_var to ptr
@@ -135,12 +140,13 @@ uninitialized pointer will crash the program.</p>
 </code></pre></div>
 <p>In a 64-bit architecture, the size of a pointer
 is 8 bytes, and for a 32-bit architecture, it is 4 bytes. The size of the pointer
-is irrelevant to the size of the variable it points to. You can get the size of pointer
-with <code>sizeof</code> function.</p>
+is irrelevant to the size of the variable it points to.
+You can get the size of the pointer with <code>sizeof</code> operator.
+Parenthesis around operand is only required for a type name.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="o">*</span><span class="n">int_ptr</span><span class="p">;</span>
 <span class="kt">double</span> <span class="o">*</span><span class="n">double_ptr</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">int_ptr_size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">int_ptr</span><span class="p">),</span>
-    <span class="n">double_ptr_size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">double_ptr</span><span class="p">);</span>  <span class="c1">// should be size_t, but I will use int for simplicity
+<span class="kt">int</span> <span class="n">int_ptr_size</span> <span class="o">=</span> <span class="k">sizeof</span> <span class="n">int_ptr</span><span class="p">,</span>
+    <span class="n">double_ptr_size</span> <span class="o">=</span> <span class="k">sizeof</span> <span class="n">double_ptr</span><span class="p">;</span>  <span class="c1">// should be size_t, but I will use int for simplicity
 </span>
 <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"size of int_ptr: "</span> <span class="o">&lt;&lt;</span> <span class="n">int_ptr_size</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span>
 <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"size of double_ptr: "</span> <span class="o">&lt;&lt;</span> <span class="n">double_ptr_size</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
@@ -150,10 +156,11 @@ with <code>sizeof</code> function.</p>
              <span class="p">((</span><span class="n">int_ptr_size</span> <span class="o">==</span> <span class="n">double_ptr_size</span><span class="p">)</span> <span class="o">?</span> <span class="s">"the same!"</span> <span class="o">:</span> <span class="s">"different!"</span> <span class="p">)</span>
           <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 </code></pre></div>
-<p>The <code>sizeof</code> function (can also be used as a statement) returns the size in bytes of
-the variable in memory. For example, <code>sizeof(int)</code> would return 4
+<p>The <code>sizeof</code> operator returns the size in bytes of
+the variable in memory.
+For example, <code>sizeof(int)</code> would return 4
 and <code>sizeof(double)</code> would return 8 on most modern computers. I will talk more
-about sizeof function later in the distinction between pointers and arrays.</p>
+about sizeof operator later in the distinction between pointers and arrays.</p>
 
 <h3>Pointer Arithmetic</h3>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="cp">#include &lt;cassert&gt;
@@ -188,7 +195,7 @@ by the size of the type that the pointer points to, and in this case, <code>size
 
 pointer subtraction produce the difference in elements between the elements
 </code></pre></div>
-<p>The difference between a<em>4</em>ptr and a<em>6</em>ptr is <code>2 * sizeof(int)</code>,
+<p>The difference between <code>a_4_ptr</code> and <code>a_6_ptr</code> is <code>2 * sizeof(int)</code>,
 but the subtraction between pointers pointing to the same type produce
 the difference in elements between the elements.</p>
 
@@ -227,17 +234,17 @@ initializing with a list.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">char</span> <span class="n">charArray</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"hello"</span><span class="p">;</span>
 <span class="kt">char</span> <span class="n">charArray</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">'h'</span><span class="p">,</span> <span class="sc">'e'</span><span class="p">,</span> <span class="sc">'l'</span><span class="p">,</span> <span class="sc">'l'</span><span class="p">,</span> <span class="sc">'o'</span><span class="p">,</span> <span class="sc">'\0'</span><span class="p">};</span>
 </code></pre></div>
-<p>Notice the array end with the character <strong>&#39;\0&#39;</strong>, which is the terminator for C strings.</p>
+<p>Notice the array end with the character <code>&#39;\0&#39;</code>, which is the terminator for C strings.</p>
 
 <p>When we try to get the length of the string with strlen function from cstring library,
-it will return the length of the character array before the first <strong>&#39;\0&#39;</strong> character.
-But when we try to get the length of the character array with <code>sizeof(charArray) / sizeof(char)</code>,
+it will return the length of the character array before the first <code>&#39;\0&#39;</code> character.
+But when we try to get the length of the character array with <code>sizeof charArray / sizeof(char)</code>,
 it will return the size of the array represented in memory, which includes the
-<strong>&#39;\0&#39;</strong> character.</p>
+<code>&#39;\0&#39;</code> character.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="cp">#include &lt;cstring&gt;
 </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">charArray</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="c1">// prints 5
-</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">charArray</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span> <span class="n">charArray</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="c1">// prints 6
 </span></code></pre></div>
 <p>Array works like pointers in that you can do pointer arithmetic and dereference.
@@ -262,21 +269,32 @@ But you cannot reassign arrays.</p>
               <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>The <code>sizeof</code> function works differently for pointers and arrays.
-You can no longer get the size of the string literal stored in memory with function <code>sizeof</code>.
-You can only get the size of the pointer itself,
-which is either 4 bytes or 8 bytes depending on your architecture.</p>
+<p>The <code>sizeof</code> operator works differently for pointers and arrays.
+Notice the difference of character pointer, character array
+and string literal.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">charPtr</span> <span class="o">=</span> <span class="s">"hello"</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="n">charArr</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"hello"</span><span class="p">;</span>
 </code></pre></div><div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">charPtr</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="c1">// returns 5, the length of the string
-</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">charPtr</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span> <span class="n">charPtr</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="c1">// returns the size of the pointer in bytes
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span> <span class="n">charArr</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="c1">// returns 6, the size of character array in memory
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span> <span class="s">"hello"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="c1">// returns 6, the size of character array in memory
 </span></code></pre></div>
-<p>Arrays are not allowed as a parameter of a function, or as a return value of a function.
-Actually When you pass an array into a function, the array is automatically casted to pointer,
-The following function will not work. as it will always return the size of pointer divided by the size of int.</p>
+<p>While it&#39;s okay to use array as the parameter of a function,
+it does not work as intended.
+Arrays decays into pointers, losing information about array dimension.
+Essentially a pointer is copied as the pointer to the first element
+of the array.
+The following function will not work, as it will always return the size
+of pointer divided by the size of int.</p>
 <div class="highlight"><pre><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="nf">getArraySize</span><span class="p">(</span><span class="kt">int</span> <span class="n">array</span><span class="p">[])</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">sizeof</span> <span class="n">array</span> <span class="o">/</span> <span class="k">sizeof</span> <span class="o">*</span><span class="n">array</span><span class="p">;</span>
     <span class="c1">// will always return the size of pointer divided by the size of int
 </span><span class="p">}</span>
 </code></pre></div>
