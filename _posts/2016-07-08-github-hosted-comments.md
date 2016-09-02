@@ -2,16 +2,21 @@
 layout: post
 title:  Add Github Hosted Comments to This Blog
 Date:   2016-07-08
-categories: software-installation
+categories: software-hack
 commentIssueId: 3
 ---
 
+*edit: 2016-8-31*
 
-This post is based on the reference
-[here](http://ivanzuzak.info/2011/02/18/github-hosted-comments-for-github-hosted-blogs.html),
-with some personalized customizations. Though the reference is somewhat
-outdated, it still offers a feasible way of hosting comments on github
-for github based blog.
+Updated with mention of same origin policy.
+
+</br>
+
+The idea of this design originated from this
+[blog post](http://ivanzuzak.info/2011/02/18/github-hosted-comments-for-github-hosted-blogs.html).
+I have adopted its idea, and added some personalized customizations.
+Though the reference blog post is somewhat outdated, it still offers
+a feasible way of hosting comments on github for github based blog.
 
 Traditional blogs tend to store everything in a database, and
 accessing a particular blog post along with its comments would be
@@ -32,7 +37,7 @@ and miss all the fun tweaking personalized customizations. So when I came
 across [this reference](http://ivanzuzak.info/2011/02/18/github-hosted-comments-for-github-hosted-blogs.html)
 aforementioned, I was surprised by its elegance and creativity. It
 immediately became clear to me that this is the right way for me to host
-the comments to my blog.
+the comments on my blog.
 
 The general idea behind this method is to treat each blog as a issue, and
 each blog comment maps to each comment of the corresponding issue.
@@ -47,7 +52,7 @@ of the markdown source. I have used this post itself as an example.
 layout: post
 title:  Add Github Hosted Comments to This Blog
 Date:   2016-07-08
-categories: software-installation
+categories: software-hack
 commentIssueId: 3
 ```
 
@@ -67,7 +72,7 @@ The next challenge is to present all the comments on my blog.
 Luckily github has provide us with issue API, which I can pull all
 the comments with an asynchronous javascript call.
 [github issue API](https://developer.github.com/v3/issues/)
-It is easy to form URL for issue API, and in this case, it's
+It is easy to form URL for issue API, and in my case, it's
 `https://api.github.com/repos/colinxy/colinxy.github.io/issues/<issue id>`,
 where issue id is the variable `commentIssueId` I have mentioned above.
 Github will respond with a json that easy to parse with javascript
@@ -106,6 +111,31 @@ An example response looks like this.
 }
 ```
 
+But as the reference blog post points out, I might need to consider the
+same origin policy. Javascript code from this wesite `http://colinxy.github.io`
+have a different origin from `https://api.github.com`, so requests made to
+`api.github.com` from `colinxy.github.io` might be restricted by the
+browser for security.
+The good news is that github API supports [Cross Origin Resource
+Sharing (CORS) for AJAX](https://developer.github.com/v3/#cross-origin-resource-sharing),
+so I don't have to concern myself with this problem.
+
+As seen in the following example (with slight modification, and most
+output omitted) using curl from github API reference, response
+headers from `api.github.com` contain `Access-Control-Allow-Origin: *`,
+which means code from any website can call this github API.
+And thanks to this line, our browsers won't block the response from github API.
+
+```
+$ curl -I https://api.github.com -H "Origin: http://colinxy.github.io"
+HTTP/1.1 200 OK
+Server: GitHub.com
+...
+Access-Control-Allow-Origin: *
+...
+```
+
+The next big step is to render the comments.
 Since github issue comments come in as markdown, so I also want to be able
 to render markdown in comment box. But Luckily, github provides an option
 to request comments in HTML, saving me a lot of trouble.
@@ -131,10 +161,10 @@ var url = "https://api.github.com/repos/colinxy/colinxy.github.io/issues/" +
 
 var request = new XMLHttpRequest();
 request.onload = function() {
-    ...  // render comments
+    // render comments
 };
 request.error = function() {
-    ...  // log error
+    // log error
 };
 request.open('GET', url, true);
 request.setRequestHeader("Accept", "application/vnd.github.v3.html+json");
@@ -146,7 +176,9 @@ working without any external javascript library, I had to manually
 append nodes into HTML documents.
 
 It took some tweaking with HTML and CSS to make comments box look
-somewhat nicer. You can checkout the relevant CSS code
+somewhat nicer, but I have to give credit to github, as I borrowed most
+of the relevant CSS design from their website.
+You can checkout the relevant CSS code
 [here](https://github.com/colinxy/colinxy.github.io/blob/source/_sass/_layout.scss#L241).
 
 ![comments](/res/github_comment.png)
