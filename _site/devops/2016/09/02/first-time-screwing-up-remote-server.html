@@ -98,7 +98,7 @@ bring it back up anyway. (stupid, stupid idea)</p>
 <p><em>ifconfig output concerning xenbr0 interface, some info omitted</em></p>
 
 <p>So I ran <code>ifconfig xenbr0 down</code> on this physical server and
-waited, but the command was irresponsive for a long time. Then I
+waited, but the command was unresponsive for a long time. Then I
 realized something was going wrong. Looking at the <code>xenbr0</code> interface,
 I saw that its inet addr has the same addr as the physical server
 itself, which means that <code>xenbr0</code> handles all incoming traffic to both
@@ -106,7 +106,7 @@ the physical server and the 2 VMs. Now I was in a big trouble -- I
 just brought down the network interface for the physical server. No
 wonder the command has no response. All 3 servers, the physical server
 and the 2 VMs were down now. I would have to ask my friend/colleague
-to reenable it at the console.</p>
+to re-enable it at the console.</p>
 
 <p>So the story ends. Any takeaway message? I will quote my friend on
 this.</p>
