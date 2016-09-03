@@ -43,3 +43,4 @@ rmdir "$SITE"
 echo
 echo "publish success"
 printf "\033[0;36m===\033[0;00m you should commit and push now \033[0;36m===\033[0;00m\n"
+echo "and don't forget to create an issue for newly written post"
