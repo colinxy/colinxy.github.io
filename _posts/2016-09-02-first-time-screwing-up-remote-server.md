@@ -6,6 +6,13 @@ categories: devops
 commentIssueId: 10
 ---
 
+*edit: 2016-09-22*
+
+Updated with the joke from nixcraft
+
+<br/>
+
+
 I guess there is always a first time for everything. When I first heard
 of jokes like `rm -rf /` and laughed at how ridiculous it was, little did
 I know that these kinds of mistakes, though not as severe, could happen
@@ -27,7 +34,7 @@ A quick run of `ifconfig` command showed the `xenbr0` interface, which
 I supposed to handle packets forwarded to VMs, but I was unable to find
 the default `eth0` interface on the host physical server. So I thought
 how about temporarily bringing the interface down, since it's easy to
-bring it back up anyway. (stupid, stupid idea)
+bring it back up anyway. *(stupid, stupid idea)*
 
 ```
 xenbr0    Link encap:Ethernet  HWaddr XX:XX:XX:XX:XX:XX
@@ -47,8 +54,17 @@ wonder the command has no response. All 3 servers, the physical server
 and the 2 VMs were down now. I would have to ask my friend/colleague
 to re-enable it at the console.
 
-So the story ends. Any takeaway message? I will quote my friend on
+So the story ends. Any takeaway messages? I will quote my friend on
 this.
 
 > Protip: if you're gonna ssh into a machine and turn off
 > network interfaces, you're gonna have a bad time.
+
+
+The other day, I came across
+[this joke](https://twitter.com/nixcraft/statuses/774612618547834880)
+from nixcraft, which perfectly illustrates the mistake I made here,
+though in terms of sshd.
+
+> I’ve never locked my keys in my car, but I did once kill sshd and
+> that’s basically the same thing.

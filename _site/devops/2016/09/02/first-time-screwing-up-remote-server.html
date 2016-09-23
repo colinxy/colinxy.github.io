@@ -69,7 +69,13 @@
   </header>
 
   <article class="post-content">
-    <p>I guess there is always a first time for everything. When I first heard
+    <p><em>edit: 2016-09-22</em></p>
+
+<p>Updated with the joke from nixcraft</p>
+
+<p><br/></p>
+
+<p>I guess there is always a first time for everything. When I first heard
 of jokes like <code>rm -rf /</code> and laughed at how ridiculous it was, little did
 I know that these kinds of mistakes, though not as severe, could happen
 to most people. So instead of the usual long technical blog post, I
@@ -90,7 +96,7 @@ network interface.</p>
 I supposed to handle packets forwarded to VMs, but I was unable to find
 the default <code>eth0</code> interface on the host physical server. So I thought
 how about temporarily bringing the interface down, since it&#39;s easy to
-bring it back up anyway. (stupid, stupid idea)</p>
+bring it back up anyway. <em>(stupid, stupid idea)</em></p>
 <div class="highlight"><pre><code class="language-" data-lang="">xenbr0    Link encap:Ethernet  HWaddr XX:XX:XX:XX:XX:XX
           inet addr:XXX.XXX.XXX.XXX  Bcast:XXX.XXX.XXX.255  Mask:255.255.255.0
           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
@@ -108,12 +114,22 @@ wonder the command has no response. All 3 servers, the physical server
 and the 2 VMs were down now. I would have to ask my friend/colleague
 to re-enable it at the console.</p>
 
-<p>So the story ends. Any takeaway message? I will quote my friend on
+<p>So the story ends. Any takeaway messages? I will quote my friend on
 this.</p>
 
 <blockquote>
 <p>Protip: if you&#39;re gonna ssh into a machine and turn off
 network interfaces, you&#39;re gonna have a bad time.</p>
+</blockquote>
+
+<p>The other day, I came across
+<a href="https://twitter.com/nixcraft/statuses/774612618547834880">this joke</a>
+from nixcraft, which perfectly illustrates the mistake I made here,
+though in terms of sshd.</p>
+
+<blockquote>
+<p>I’ve never locked my keys in my car, but I did once kill sshd and
+that’s basically the same thing.</p>
 </blockquote>
 
   </article>
