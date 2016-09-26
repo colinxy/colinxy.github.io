@@ -19,3 +19,5 @@ permalink: /links/
 - [Kun Qian](http://kevinkassimo.github.io/)
 - [Yingbo Wang](http://maxwyb.github.io)
 - [Hongee Zhang](http://hongee.github.io/)
+- [Haozhuo Huang]()
+- [Dmitri Brereton](http://dbrereton.com/)

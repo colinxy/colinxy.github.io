@@ -33,13 +33,18 @@ About the Blog
 This blog is powered by Jekyll on Github pages, which means I can
 write simple markdown for my blog posts. But markdown is not as
 fully featured as HTML as it trades many features for simplicity.
-For example, when you click on a link inside my blog post (not the
-links on the footer), it will open in the same page, which is
-particularly annoying to me. So, use right-click or ctrl-click and
-open link in new tab if you like.
+
+As this blog is my very first attempt at blogging, I could experiment
+a lot of things on this blog without notifying anyone; for example, a
+permanent link that worked today might break tomorrow. I am really
+sorry for the inconvience caused.
 
 
 </br>
 
 About the Title
 ==============
+
+I am a fan of functional programming languages. However, the state of
+software engineering is constant change, no matter how we envision it
+to be.
