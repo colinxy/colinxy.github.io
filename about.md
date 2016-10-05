@@ -24,6 +24,9 @@ I remember someone (whom I couldn't recall) once said that he
 could tell personality from a person's emacs configuration.
 So is the case in choice of software or programming languages.
 
+I enjoy [digitalocean](https://digitalocean.com) for cloud hosting.
+Here is [my referal link](https://m.do.co/c/4604523c7997) if you want to
+get $10 for free.
 
 </br>
 
@@ -32,7 +35,7 @@ About the Blog
 
 This blog is powered by Jekyll on Github pages, which means I can
 write simple markdown for my blog posts. But markdown is not as
-fully featured as HTML as it trades many features for simplicity.
+fully featured as HTML as it trades features for simplicity.
 
 As this blog is my very first attempt at blogging, I could experiment
 a lot of things on this blog without notifying anyone; for example, a
