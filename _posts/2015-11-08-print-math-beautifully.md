@@ -91,4 +91,4 @@ $$ \\int e^{- x^{2}}\\, dx $$
 Please go to my [source code](https://github.com/colinxy/colinxy.github.io/blob/master/_posts/2015-11-08-print-math-beatifully.md)
 to see how it is actually done.
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
