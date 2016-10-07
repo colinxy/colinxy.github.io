@@ -2,7 +2,7 @@
 layout: post
 title:  Emacs 25 EasyPG Issue
 Date:   2016-09-24
-categories: software installation
+categories: software-installation
 commentIssueId: 11
 ---
 

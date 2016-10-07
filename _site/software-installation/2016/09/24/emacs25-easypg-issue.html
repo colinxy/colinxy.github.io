@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>First Time Screwing up Remote Servers</title>
+    <title>Emacs 25 EasyPG Issue</title>
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/devops/2016/09/02/first-time-screwing-up-remote-server.html">
+    <link rel="canonical" href="/software-installation/2016/09/24/emacs25-easypg-issue.html">
 
     <link rel="shortcut icon" href="/res/favicon.jpg">
 </head>
@@ -64,73 +64,105 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">First Time Screwing up Remote Servers</h1>
-    <p class="post-meta">Sep 2, 2016</p>
+    <h1 class="post-title">Emacs 25 EasyPG Issue</h1>
+    <p class="post-meta">Sep 24, 2016</p>
   </header>
 
   <article class="post-content">
-    <p><em>edit: 2016-09-22</em></p>
+    <p>Upgrading software is always a hassle. Missing dependencies and
+renamed variables alone could make one&#39;s life miserable. In a word,
+things just break. Even for a mature program like Emacs that has been
+around for more than 3 decades.</p>
 
-<p>Updated with the joke from nixcraft</p>
+<p>I recently upgraded emacs 24.5 to 25.1, and most things worked
+seamlessly. A really nice feature made available is that
+the completion buffer will only pop up as big as needed, a lot
+smoother than the previous design of rigidly taking up half of the
+window. One new feature that gets me really excited is the Xwidgets.
+Just take a look at this snapshot, but take an extra look at the
+modeline, meaning that it runs inside emacs.</p>
+
+<p><img src="https://raw.githubusercontent.com/tuhdo/xwidgete/master/demo/emacs_watch_youtube.gif" alt="snapshot"></p>
+
+<p><em>(gif credit to tuhdo)</em></p>
+
+<p>Emacs finally has the capability of running as a full
+operating system with pretty graphics, though it&#39;s still in &quot;alpha&quot;
+status. A life entirely inside emacs is possible in the near future.
+Unfortunate for Mac OS X users, a homebrew build for emacs with
+Xwidgets is still not available currently, but you can always build
+from source by yourself.</p>
 
 <p><br/></p>
 
-<p>I guess there is always a first time for everything. When I first heard
-of jokes like <code>rm -rf /</code> and laughed at how ridiculous it was, little did
-I know that these kinds of mistakes, though not as severe, could happen
-to most people. So instead of the usual long technical blog post, I
-will briefly document how I screwed up our servers at Linux User Group
-remotely. Though I did not cause any trouble as permanent as wiping
-out our disk, my mistake caused hours of downtime for our servers.</p>
+<p>Back to bussiness about EasyPG problem.
+The problem starts with gnus being broken in my emacs 25. Initially I
+tried to find answers related to gnus, but the error message says
+something otherwise.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">Error while decrypting with "gpg2":
 
-<p>I sshed into the remote server as root (yes, you know how the story
-goes) to configure our ssh service. This physical server holds 2 other
-virtual machines, which are critical to the running of our website.
-How networking on this server works gets really interesting.
-Since both VMs have their own public IPs, the physical server has to
-sort out traffic forwarded to itself and the 2 virtual servers. The 2
-virtual servers runs on Xen hypervisor, and here comes the <code>xenbr0</code>
-network interface.</p>
+gpg: encrypted with 2048-bit RSA key, ...
 
-<p>A quick run of <code>ifconfig</code> command showed the <code>xenbr0</code> interface, which
-I supposed to handle packets forwarded to VMs, but I was unable to find
-the default <code>eth0</code> interface on the host physical server. So I thought
-how about temporarily bringing the interface down, since it&#39;s easy to
-bring it back up anyway. <em>(stupid, stupid idea)</em></p>
-<div class="highlight"><pre><code class="language-" data-lang="">xenbr0    Link encap:Ethernet  HWaddr XX:XX:XX:XX:XX:XX
-          inet addr:XXX.XXX.XXX.XXX  Bcast:XXX.XXX.XXX.255  Mask:255.255.255.0
-          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+gpg: public key decryption failed: Operation cancelled
+gpg: decryption failed: No secret key
 </code></pre></div>
-<p><em>ifconfig output concerning xenbr0 interface, some info omitted</em></p>
+<p>I use <code>~/.authinfo.gpg</code> to store my password and emacs automatically
+encrypt it with my GnuPG key (great feature! try it).
+It complained about not being about to read my password file
+<code>~/.authinfo.gpg</code> which is protected with my GnuPG passphrase.</p>
 
-<p>So I ran <code>ifconfig xenbr0 down</code> on this physical server and
-waited, but the command was unresponsive for a long time. Then I
-realized something was going wrong. Looking at the <code>xenbr0</code> interface,
-I saw that its inet addr has the same addr as the physical server
-itself, which means that <code>xenbr0</code> handles all incoming traffic to both
-the physical server and the 2 VMs. Now I was in a big trouble -- I
-just brought down the network interface for the physical server. No
-wonder the command has no response. All 3 servers, the physical server
-and the 2 VMs were down now. I would have to ask my friend/colleague
-to re-enable it at the console.</p>
+<p>Since Emacs use EasyPG as the interface to GnuPG program, we can now
+locate the problem to EasyPG. When I tried to open <code>~/.authinfo.gpg</code>
+file, emacs automatically loads it through EasyPG. But emacs did not
+bring up the interface to enter the passphrase for my secret key. Here
+is the relevant error message for me.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">gpg-agent: command get_passphrase failed: inappropriate ioctl for device
+</code></pre></div>
+<p>It looks like that emacs cannot read my passphrase through some interface.</p>
 
-<p>So the story ends. Any takeaway messages? I will quote my friend on
-this.</p>
+<p>Everywhere I looked, I couldn&#39;t find a solution.
+But then I came across a <a href="http://fossies.org/diffs/emacs/24.5_vs_25.1/lisp/epa.el-diff.html">source diff for epa.el for emacs 24.5 and
+emacs 25.1</a>.
+It gives me a nice insight of what is going on inside the epa.el
+(EasyPG) source code. I have reproduced the relevant diff below.</p>
+<div class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="p">(</span><span class="nv">defcustom</span> <span class="nv">epa-pinentry-mode</span> <span class="no">nil</span>
+  <span class="s">"The pinentry mode.
 
-<blockquote>
-<p>Protip: if you&#39;re gonna ssh into a machine and turn off
-network interfaces, you&#39;re gonna have a bad time.</p>
-</blockquote>
+GnuPG 2.1 or later has an option to control the behavior of
+Pinentry invocation.  Possible modes are: `ask', `cancel',
+`error', and `loopback'.  See the GnuPG manual for the meanings.
 
-<p>The other day, I came across
-<a href="https://twitter.com/nixcraft/statuses/774612618547834880">this joke</a>
-from nixcraft, which perfectly illustrates the mistake I made here,
-though in terms of sshd.</p>
+In epa commands, a particularly useful mode is `loopback', which
+redirects all Pinentry queries to the caller, so Emacs can query
+passphrase through the minibuffer, instead of external Pinentry
+program."</span>
+  <span class="ss">:type</span> <span class="o">'</span><span class="p">(</span><span class="nv">choice</span> <span class="p">(</span><span class="nv">const</span> <span class="no">nil</span><span class="p">)</span>
+                 <span class="p">(</span><span class="nv">const</span> <span class="nv">ask</span><span class="p">)</span>
+                 <span class="p">(</span><span class="nv">const</span> <span class="nv">cancel</span><span class="p">)</span>
+                 <span class="p">(</span><span class="nv">const</span> <span class="nb">error</span><span class="p">)</span>
+                 <span class="p">(</span><span class="nv">const</span> <span class="nv">loopback</span><span class="p">))</span>
+  <span class="ss">:group</span> <span class="ss">'epa</span>
+  <span class="ss">:version</span> <span class="s">"25.1"</span><span class="p">)</span>
+</code></pre></div>
+<p>On line 47 of <code>epa.el</code> for emacs 25.1, a new variable
+<code>epa-pinentry-mode</code> is introduced with <code>defcustom</code>.
+Its documentation says something about the invocation of <code>pinentry</code>,
+which sounds like the interface for entering the passphrase. And as
+the documentation says, by setting <code>epa-pinentry-mode</code> to <code>&#39;loopback</code>
+Emacs will handle querying the passphrase through minibuffer, the
+perfect desired behavior.</p>
 
-<blockquote>
-<p>I’ve never locked my keys in my car, but I did once kill sshd and
-that’s basically the same thing.</p>
-</blockquote>
+<p>Now I add this line of code to my <code>.emacs</code>, and problem solved! Though
+good proctice might add it though <code>custom-set-variables</code>.</p>
+<div class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="p">(</span><span class="nb">setf</span> <span class="nv">epa-pinentry-mode</span> <span class="ss">'loopback</span><span class="p">)</span>
+</code></pre></div>
+<p>A caveat if you are a Mac OS X user like I am, is that <code>brew install
+gnupg2</code> would only install GnuPG 2.0, but not GnuPG 2.1. To install
+GnuPG 2.1, you need to do <code>brew install gnupg21</code>. The reason for this
+design is that GnuPG 2.1 has a new keychain format that is not
+compatible with GnuPG 2.0 and GnuPG 1.x.
+Somehow emacs 25&#39;s EasyPG <strong>only supports GnuPG 2.1 in my case</strong>, so
+you might have to look out for that.</p>
 
   </article>
 
@@ -138,14 +170,14 @@ that’s basically the same thing.</p>
     <h3><strong><em>Comments</em></strong></h3>
     <div>
       Want to leave a comment? Write your comment
-      <a href="https://github.com/colinxy/colinxy.github.io/issues/10">here</a>.
+      <a href="https://github.com/colinxy/colinxy.github.io/issues/11">here</a>.
     </div>
     <div id="comments"></div>
   </div>
 
   <script type="text/javascript">
 
-   var commentIssueId = 10;
+   var commentIssueId = 11;
    /* console.log(commentIssueId);*/
 
    function formatComment(user, userUrl, avatar, date, commentUrl, body) {

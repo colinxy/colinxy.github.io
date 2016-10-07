@@ -4,9 +4,10 @@ exclude: ["README.md"]
 
 # Site settings
 title: Mutable State
+email: colinxy@linux.ucla.edu
 # description: > # this means to ignore newlines until "baseurl:"
 #   All posts and <a href="https://github.com/colinxy/colinxy.github.io">source code</a>
-#   are released under MIT license
+#   are released under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Common License</a>
 
 baseurl: "" # the subpath of your site, e.g. /blog/
 github_username:  colinxy
