@@ -10,7 +10,7 @@ Here I maintain a list of my preferences as they changes over time.
 
 ### 2016-01-30
 
-- I prefer Python to Javascipt.
+- I prefer Python to Javascript.
 - I prefer C++ to Java.
 - I prefer emacs to vim.
 
@@ -23,3 +23,13 @@ but I am adding new stuff to this list.
   Hopefully it will be my new favorite alongside python.
 - I still consider javascript worthless my time even though I have
   coded a project in it.
+
+### 2016-10-22
+
+Ruby is a weird language that is more akin to Lisp than Python,
+but if you want to be more functional, do it right.
+Also here is my message to rubyists.
+
+```sh
+python -c 'import this' | grep way
+```

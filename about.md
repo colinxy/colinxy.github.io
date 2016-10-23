@@ -29,7 +29,7 @@ Here is my project euler profile
 ![my project euler profile](https://projecteuler.net/profile/yangxinyu.png)
 
 I am a fan of functional programming languages, but I don't get much
-chance writing it.
+chance writing in them.
 
 I maintain a [history of preferences]({{ site.baseurl }}/preferences)
 (CS related) as they change over time.
