@@ -70,8 +70,6 @@ sorry for the inconvience caused.
 </br>
 
 About the Title
-==============
+===============
 
-I am a fan of functional programming languages. However, the state of
-software engineering is constant change, no matter how we envision it
-to be.
+The world is functional while I am not.
