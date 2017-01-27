@@ -33,7 +33,7 @@ chance writing in them.
 
 I maintain a [history of preferences]({{ site.baseurl }}/preferences)
 (CS related) as they change over time.
-Since I still fairly young, both options of the above categories are
+Since I am still fairly young, both options of the above categories are
 open to me. Hopefully, it would be of interest to both readers and
 the future me.
 

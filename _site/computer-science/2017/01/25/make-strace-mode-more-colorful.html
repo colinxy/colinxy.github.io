@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Mutable State</title>
+    <title>Make strace-mode More Colorful</title>
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/">
+    <link rel="canonical" href="/computer-science/2017/01/25/make-strace-mode-more-colorful.html">
 
     <link rel="shortcut icon" href="/res/favicon.jpg">
 </head>
@@ -61,109 +61,110 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <div class="post">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title">Make strace-mode More Colorful</h1>
+    <p class="post-meta">Jan 25, 2017</p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Jan 26, 2017</span>
+  <article class="post-content">
+    <p><em>This post will be updated with more information on strace-mode (with
+snapshot) and emacs font-lock</em></p>
 
-        <h2>
-          <a class="post-link" href="/computer-science/2017/01/26/how-bash-handles-signals.html">Signal handling and What Bash Does to It</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 25, 2017</span>
+<p>Just made my first pull request to a open source project! Hopefully my
+pull request will be accepted.</p>
 
-        <h2>
-          <a class="post-link" href="/computer-science/2017/01/25/make-strace-mode-more-colorful.html">Make strace-mode More Colorful</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Oct 4, 2016</span>
+<p>Strace-mode is a emacs major mode for syntax highlighting output from
+<code>strace</code> command on linux. You can download the package from melpa,
+also checkout the repo <a href="https://github.com/pkmoore/strace-mode">here</a>.</p>
 
-        <h2>
-          <a class="post-link" href="/devops/2016/10/04/setting-up-postgresql-on-cloud.html">Setting up PostgreSQL on Cloud</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 24, 2016</span>
+  </article>
 
-        <h2>
-          <a class="post-link" href="/software-installation/2016/09/24/emacs25-easypg-issue.html">Emacs 25 EasyPG Issue</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 2, 2016</span>
+  <div>
+    <h3><strong><em>Comments</em></strong></h3>
+    <div>
+      Want to leave a comment? Write your comment
+      <a href="https://github.com/colinxy/colinxy.github.io/issues/">here</a>.
+    </div>
+    <div id="comments"></div>
+  </div>
 
-        <h2>
-          <a class="post-link" href="/devops/2016/09/02/first-time-screwing-up-remote-server.html">First Time Screwing up Remote Servers</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 8, 2016</span>
+  <script type="text/javascript">
 
-        <h2>
-          <a class="post-link" href="/software-hack/2016/07/08/github-hosted-comments.html">Add Github Hosted Comments to This Blog</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 10, 2016</span>
+   var commentIssueId = ;
+   /* console.log(commentIssueId);*/
 
-        <h2>
-          <a class="post-link" href="/computer-science/2016/05/10/a-first-step-in-lisp.html">A First Step In Lisp</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 10, 2016</span>
+   function formatComment(user, userUrl, avatar, date, commentUrl, body) {
+     /* header */
+     var commentHeaderAvatar = document.createElement("span");
+     commentHeaderAvatar.innerHTML = "<img src='" + avatar +
+                                     "' width='20' height='20'>";
+     var usr = document.createElement("strong"); /* user */
+     usr.innerHTML = user;
+     var commentHeaderUser = document.createElement("a"); /* user div */
+     commentHeaderUser.className = "comment-header-user";
+     commentHeaderUser.href = userUrl;
+     commentHeaderUser.appendChild(usr);
+     var dat = document.createElement("a"); /* date */
+     dat.href = commentUrl;
+     dat.innerHTML = date;
+     var commentHeaderDate = document.createElement("span"); /* date div */
+     commentHeaderDate.appendChild(dat);
 
-        <h2>
-          <a class="post-link" href="/random-thoughts/2016/04/10/the-commit-challenge.html">The Commit Challenge</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 1, 2016</span>
+     var commentHeader = document.createElement("div");
+     commentHeader.className = "comment-header";
+     commentHeader.appendChild(commentHeaderAvatar);
+     commentHeader.appendChild(commentHeaderUser);
+     commentHeader.appendChild(commentHeaderDate);
 
-        <h2>
-          <a class="post-link" href="/random-thoughts/2016/01/01/retrospection.html">Retrospection</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Nov 9, 2015</span>
+     /* body */
+     var commentBody = document.createElement("div");
+     commentBody.className = "comment-body";
+     commentBody.innerHTML = body;
 
-        <h2>
-          <a class="post-link" href="/computer-science/2015/11/09/pointer.html">Pointers in C/C++</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Nov 8, 2015</span>
+     /* comment (header + body) */
+     var comment = document.createElement("div");
+     comment.className = "comment";
+     comment.appendChild(commentHeader);
+     comment.appendChild(commentBody);
 
-        <h2>
-          <a class="post-link" href="/software-installation/2015/11/08/print-math-beautifully.html">Print Math Beautifully</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Nov 8, 2015</span>
+     return comment;
+   }
 
-        <h2>
-          <a class="post-link" href="/random-thoughts/2015/11/08/hello-world.html">Hello World</a>
-        </h2>
-      </li>
-    
-  </ul>
+   if (commentIssueId) {
+     console.log("loading comments...");
+
+     var url = "https://api.github.com/repos/colinxy/colinxy.github.io/issues/" +
+               commentIssueId + "/comments";
+
+     var request = new XMLHttpRequest();
+     request.onload = function() {
+       var response = JSON.parse(request.responseText);
+       /* console.log(response);*/
+       var comments = document.getElementById("comments");
+
+       for ( var i = 0; i < response.length; i++) {
+         var user = response[i].user.login;
+         var userUrl = response[i].user.html_url;
+         var avatar = response[i].user.avatar_url;
+         var date = new Date(response[i].updated_at).toDateString();
+         var commentUrl = response[i].html_url;
+         var body = response[i].body_html;
+
+         comments.appendChild(formatComment(user, userUrl, avatar,
+                                            date, commentUrl, body));
+       }
+     };
+     request.error = function() {
+       console.log("error loading comments");
+     };
+
+     request.open('GET', url, true);
+     request.setRequestHeader("Accept", "application/vnd.github.v3.html+json");
+     request.send();
+   }
+  </script>
 
 </div>
 
