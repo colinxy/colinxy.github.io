@@ -10,7 +10,7 @@
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/computer-science/2017/01/26/how-bash-handles-signals.html">
+    <link rel="canonical" href="/computer-science/2017/01/27/bash-handles-signals.html">
 
     <link rel="shortcut icon" href="/res/favicon.jpg">
 </head>
@@ -65,17 +65,26 @@
 
   <header class="post-header">
     <h1 class="post-title">Signal handling and What Bash Does to It</h1>
-    <p class="post-meta">Jan 26, 2017</p>
+    <p class="post-meta">Jan 27, 2017</p>
   </header>
 
   <article class="post-content">
     <p>If you are looking for a gentle introduction to signals on linux or a
 tutorial on using <code>trap</code> to handle signals in bash script, this
-article is not for you. Instead, I will recount my encounter with a
-rare bug when testing signal handling in C inside bash driver script.
+article is not for you. This article
+<a href="http://www.alexonlinux.com/signal-handling-in-linux">signal handling in linux</a>
+serves as a good introduction. Instead, I will recount my encounter
+with a rare bug when testing signal handling in C inside bash driver
+script.</p>
+
+<p>Signal handling is hard since it is asynchronous by nature, and it is
+going to be a lot messier when multithreading is involved. Luckily, I
+am only doing single threaded programs here.
 Remember, man pages are your best friends when coding in C, and
 <a href="http://man7.org/linux/man-pages/man7/signal.7.html">signal(7)</a>
 is your savior.</p>
+
+<h2>Signal Handling Program in C</h2>
 
 <p>Here is a simple C program that ignores signal 1 (<code>SIGHUP</code>) and
 handles signal 15 (<code>SIGTERM</code>) with a custom handler using
@@ -145,8 +154,37 @@ handle, shown as follows.</p>
 <span class="gp">$ </span><span class="nb">kill</span> -INT 3209
 <span class="o">[</span>1]+  Interrupt               ./a.out
 </code></pre></div>
-<p>But when I put my commands in a bash script, weird things happened.</p>
-<div class="highlight"><pre><code class="language-sh" data-lang="sh">
+<h2>Bash Driver Script</h2>
+
+<p>But when I put my commands in a bash script <code>sig.sh</code>, weird things
+happened.</p>
+<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="c">#!/bin/bash</span>
+
+<span class="nb">set</span> -e
+
+./sig &amp;
+<span class="nv">pid</span><span class="o">=</span><span class="nv">$!</span>
+<span class="nb">echo</span> <span class="nv">$pid</span>
+
+<span class="c"># if we don't sleep, ./sig process might be sent SIGHUP before execve</span>
+sleep 1
+<span class="nb">echo</span> <span class="s2">"send SIGHUP to process </span><span class="nv">$pid</span><span class="s2">"</span>
+<span class="c"># send SIGHUP to process</span>
+<span class="nb">kill</span> -HUP <span class="nv">$pid</span> <span class="o">||</span> <span class="nb">exit </span>1
+<span class="c"># signal propagation might take time</span>
+sleep 1
+<span class="c"># check whether process is still alive</span>
+<span class="nb">kill</span> -0 <span class="nv">$pid</span> <span class="o">||</span> <span class="nb">exit </span>1
+
+<span class="c"># process should still be alive since we ignored SIGHUP</span>
+
+<span class="nb">echo</span> <span class="s2">"send SIGINT to process </span><span class="nv">$pid</span><span class="s2">"</span>
+<span class="c"># send SIGINT to process</span>
+<span class="nb">kill</span> -INT <span class="nv">$pid</span> <span class="o">||</span> <span class="nb">exit </span>1
+<span class="c"># signal propagation might take time</span>
+sleep 1
+<span class="c"># check whether process is still alive</span>
+<span class="nb">kill</span> -0 <span class="nv">$pid</span> <span class="o">&amp;&amp;</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">"process </span><span class="nv">$pid</span><span class="s2"> still alive"</span>; <span class="o">}</span>
 </code></pre></div>
 <p>Some explanation:</p>
 
@@ -156,8 +194,9 @@ in background.</li>
 <li><code>kill -0 &lt;PID&gt;</code> is used to check for the existence of a process
 ID. This <code>kill</code> invoked from bash should be a shell builtin rather
 than <code>/usr/bin/kill</code>. See
-<a href="http://man7.org/linux/man-pages/man2/kill.2.html">kill(2)</a>
-for more detail. Here is some relevant quote.</li>
+job control builtin <a href="https://www.gnu.org/software/bash/manual/bashref.html#Job-Control-Builtins"><code>kill</code> for bash(1)</a>
+and <a href="http://man7.org/linux/man-pages/man2/kill.2.html">kill(2)</a>
+for more detail. Here is the relevant quote from <code>kill(2)</code>.</li>
 </ul>
 
 <blockquote>
@@ -166,12 +205,86 @@ performed; this can be used to check for the existence of a
 process ID or process group ID.</p>
 </blockquote>
 
-<p>How a command is executed in
-<a href="http://git.savannah.gnu.org/cgit/bash.git/tree/execute_cmd.c#n5095">bash source code</a></p>
+<p>Now execute the script:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">$ ./sig.sh
+3418
+send SIGHUP to process 3418
+send SIGINT to process 3418
+process 3418 still alive
+$ pstree -s -p 3418  # -s shows parent processes
+systemd(1)───sig(3418)
+</code></pre></div>
+<p><code>./sig</code> process is still alive after <code>SIGINT</code> and it became an orphan
+process after the bash script process dies, which is expected.
+But wait, why is the process still alive after <code>SIGINT</code>? <code>sig.c</code>
+program does not handle <code>SIGINT</code>, and by default <code>SIGINT</code> terminates
+the process. So what happened here?</p>
 
-<p><a href="https://www.gnu.org/software/bash/manual/html_node/Signals.html">bash signals</a></p>
+<h2>Strace to the Rescue</h2>
 
-<p><a href="http://www.alexonlinux.com/signal-handling-in-linux">signal handling in linux</a></p>
+<p>Now I turn to another best friend of ours,
+<a href="http://man7.org/linux/man-pages/man1/strace.1.html">strace(1)</a>.</p>
+<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>strace -f -b execve -o sig.strace ./sig.sh
+</code></pre></div>
+<p><code>-f</code> option makes <code>strace</code> trace child process of <code>./sig.sh</code> process
+as well. <code>-b execve</code> makes <code>strace</code> detach from traced process when
+<code>execve</code> is reached. <code>-o sig.strace</code> writes the output of <code>strace</code> to
+the file <code>sig.strace</code>. I have reproduced the relevant content of
+<code>sig.strace</code> below.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">3814  clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fb0a8961a10) = 3815
+3815  rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+3815  rt_sigaction(SIGTSTP, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, {SIG_DFL, [], 0}, 8) = 0
+3815  rt_sigaction(SIGTTIN, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, {SIG_DFL, [], 0}, 8) = 0
+3815  rt_sigaction(SIGTTOU, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, {SIG_DFL, [], 0}, 8) = 0
+3815  rt_sigaction(SIGINT, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, 8) = 0
+3815  rt_sigaction(SIGQUIT, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, {SIG_IGN, [], SA_RESTORER, 0x7fb0a7f93250}, 8) = 0
+3815  rt_sigaction(SIGCHLD, {SIG_DFL, [], SA_RESTORER|SA_RESTART, 0x7fb0a7f93250}, {0x441200, [], SA_RESTORER|SA_RESTART, 0x7fb0a7f93250}, 8) = 0
+3815  open("/dev/null", O_RDONLY)       = 3
+3815  dup2(3, 0)                        = 0
+3815  close(3)                          = 0
+3815  rt_sigaction(SIGINT, {SIG_IGN, [], SA_RESTORER, 0x7fb0a7f93250}, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, 8) = 0
+3815  rt_sigaction(SIGQUIT, {SIG_IGN, [], SA_RESTORER, 0x7fb0a7f93250}, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, 8) = 0
+3815  execve("./sig", ["./sig"], [/* 24 vars */] &lt;detached ...&gt;
+</code></pre></div>
+<p>So between <code>fork</code> (<code>clone</code> here) and <code>execve</code>, a lot of things
+happended here. In particular, <code>SIGINT</code> signal handler has been
+installed on the process as shown below. It has been set to <code>SIG_IGN</code>,
+which ignores <code>SIGINT</code> entirely.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">3815  rt_sigaction(SIGINT, {SIG_IGN, [], SA_RESTORER, 0x7fb0a7f93250}, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, 8) = 0
+</code></pre></div>
+<p>Now I found the culprit, it&#39; bash! Bash inserted multiple signal
+handlers after we forked, and that&#39;s why <code>SIGINT</code> cannot the <code>./sig</code>
+program.</p>
+
+<p>So If I want to restore default <code>SIGINT</code> handler to my program, I just
+need to add <code>signal(SIGINT, SIG_DFL);</code> to the top of the main function
+in my <code>sig.c</code> program. Problem solved!</p>
+
+<h2>Conclusion</h2>
+
+<p>Bash installs signal handler for subcommands executed in bash
+scripts. This may not be the desired behavior for a low level signal
+handling C program, so <strong><em>do not rely on a signal handler being the
+default one, but always set it to the default signal handler
+explicitly</em></strong>.</p>
+
+<p>Here the <a href="https://www.gnu.org/software/bash/manual/html_node/Signals.html">bash documentation</a>
+specifies that <code>SIGINT</code> is ignored when executed as a asynchronous
+command, which is the case in my example above.</p>
+
+<blockquote>
+<p>Non-builtin commands started by Bash have signal handlers set to the
+values inherited by the shell from its parent. When job control is
+not in effect, asynchronous commands ignore SIGINT and SIGQUIT in
+addition to these inherited handlers. Commands run as a result of
+command substitution ignore the keyboard-generated job control
+signals SIGTTIN, SIGTTOU, and SIGTSTP.</p>
+</blockquote>
+
+<p>Also
+<a href="http://git.savannah.gnu.org/cgit/bash.git/tree/execute_cmd.c?id=bc007799f0e1362100375bb95d952d28de4c62fb#n5095">bash source code</a>
+provides a good insight on how this is done in bash&#39;s C
+implementation.</p>
 
   </article>
 
