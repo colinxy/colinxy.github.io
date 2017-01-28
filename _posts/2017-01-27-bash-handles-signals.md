@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  Signal handling and What Bash Does to It
+title:  Signal Handling and What Bash Does to It
 Date:   2017-01-27
 categories: computer-science
-commentIssueId:
+commentIssueId: 13
 ---
 
 
@@ -163,7 +163,7 @@ systemd(1)───sig(3418)
 ```
 
 `./sig` process is still alive after `SIGINT` and it became an orphan
-process after the bash script process dies, which is expected.
+process after the bash script process dies.
 But wait, why is the process still alive after `SIGINT`? `sig.c`
 program does not handle `SIGINT`, and by default `SIGINT` terminates
 the process. So what happened here?
@@ -173,6 +173,8 @@ the process. So what happened here?
 
 Now I turn to another best friend of ours,
 [strace(1)](http://man7.org/linux/man-pages/man1/strace.1.html).
+`strace` traces system calls and signals and print it in a quite human
+readable format. It's even more readable than my source code!
 
 ```sh
 $ strace -f -b execve -o sig.strace ./sig.sh
@@ -201,7 +203,7 @@ the file `sig.strace`. I have reproduced the relevant content of
 3815  execve("./sig", ["./sig"], [/* 24 vars */] <detached ...>
 ```
 
-So between `fork` (`clone` here) and `execve`, a lot of things
+So between `fork` (`clone` actually) and `execve`, a lot of things
 happended here. In particular, `SIGINT` signal handler has been
 installed on the process as shown below. It has been set to `SIG_IGN`,
 which ignores `SIGINT` entirely.

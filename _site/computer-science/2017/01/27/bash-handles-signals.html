@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Signal handling and What Bash Does to It</title>
+    <title>Signal Handling and What Bash Does to It</title>
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
@@ -64,7 +64,7 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Signal handling and What Bash Does to It</h1>
+    <h1 class="post-title">Signal Handling and What Bash Does to It</h1>
     <p class="post-meta">Jan 27, 2017</p>
   </header>
 
@@ -215,7 +215,7 @@ $ pstree -s -p 3418  # -s shows parent processes
 systemd(1)───sig(3418)
 </code></pre></div>
 <p><code>./sig</code> process is still alive after <code>SIGINT</code> and it became an orphan
-process after the bash script process dies, which is expected.
+process after the bash script process dies.
 But wait, why is the process still alive after <code>SIGINT</code>? <code>sig.c</code>
 program does not handle <code>SIGINT</code>, and by default <code>SIGINT</code> terminates
 the process. So what happened here?</p>
@@ -223,7 +223,9 @@ the process. So what happened here?</p>
 <h2>Strace to the Rescue</h2>
 
 <p>Now I turn to another best friend of ours,
-<a href="http://man7.org/linux/man-pages/man1/strace.1.html">strace(1)</a>.</p>
+<a href="http://man7.org/linux/man-pages/man1/strace.1.html">strace(1)</a>.
+<code>strace</code> traces system calls and signals and print it in a quite human
+readable format. It&#39;s even more readable than my source code!</p>
 <div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>strace -f -b execve -o sig.strace ./sig.sh
 </code></pre></div>
 <p><code>-f</code> option makes <code>strace</code> trace child process of <code>./sig.sh</code> process
@@ -246,7 +248,7 @@ the file <code>sig.strace</code>. I have reproduced the relevant content of
 3815  rt_sigaction(SIGQUIT, {SIG_IGN, [], SA_RESTORER, 0x7fb0a7f93250}, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, 8) = 0
 3815  execve("./sig", ["./sig"], [/* 24 vars */] &lt;detached ...&gt;
 </code></pre></div>
-<p>So between <code>fork</code> (<code>clone</code> here) and <code>execve</code>, a lot of things
+<p>So between <code>fork</code> (<code>clone</code> actually) and <code>execve</code>, a lot of things
 happended here. In particular, <code>SIGINT</code> signal handler has been
 installed on the process as shown below. It has been set to <code>SIG_IGN</code>,
 which ignores <code>SIGINT</code> entirely.</p>
@@ -292,14 +294,14 @@ implementation.</p>
     <h3><strong><em>Comments</em></strong></h3>
     <div>
       Want to leave a comment? Write your comment
-      <a href="https://github.com/colinxy/colinxy.github.io/issues/">here</a>.
+      <a href="https://github.com/colinxy/colinxy.github.io/issues/13">here</a>.
     </div>
     <div id="comments"></div>
   </div>
 
   <script type="text/javascript">
 
-   var commentIssueId = ;
+   var commentIssueId = 13;
    /* console.log(commentIssueId);*/
 
    function formatComment(user, userUrl, avatar, date, commentUrl, body) {
