@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>About</title>
+    <title>Make strace-mode More Colorful</title>
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/about/">
+    <link rel="canonical" href="/computer-science/2017/01/25/make-strace-mode-more-colorful.html">
 
     <link rel="shortcut icon" href="/res/favicon.jpg">
 </head>
@@ -64,76 +64,107 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">About</h1>
+    <h1 class="post-title">Make strace-mode More Colorful</h1>
+    <p class="post-meta">Jan 25, 2017</p>
   </header>
 
   <article class="post-content">
-    <h1>About Me</h1>
+    <p><em>This post will be updated with more information on strace-mode (with
+snapshot) and emacs font-lock</em></p>
 
-<p>This is primarily my technical blog, but you will see some
-nontechnical ones under the label <code>random-thoughts</code>.</p>
+<p>Just made my first pull request to a open source project! Hopefully my
+pull request will be accepted.</p>
 
-<p>I don&#39;t really like posting very personal things online. But if you
-want to know me, just send me an email. I will be more than happy to
-respond to it.</p>
-
-<h4><strong><em>Here are some quick facts:</em></strong></h4>
-
-<p>I am currently an undergraduate student majoring in Computer Science
-at UCLA.</p>
-
-<p>Emacs is my editor of choice.</p>
-
-<p>Python is my goto language.</p>
-
-<p>I enjoy solving problems on <a href="https://projecteuler.net/">project euler</a>.
-Here is my project euler profile</p>
-
-<p><img src="https://projecteuler.net/profile/yangxinyu.png" alt="my project euler profile"></p>
-
-<p>I am a fan of functional programming languages, but I don&#39;t get much
-chance writing in them.</p>
-
-<p>I maintain a <a href="/preferences">history of preferences</a>
-(CS related) as they change over time.
-Since I am still fairly young, both options of the above categories are
-open to me. Hopefully, it would be of interest to both readers and
-the future me.</p>
-
-<p>I remember someone (whom I couldn&#39;t recall) once said that he
-could tell personality from a person&#39;s emacs configuration.
-Here is my <a href="https://github.com/colinxy/dotfiles">dotfiles</a>
-(mostly emacs configuration) if you want to check it out.</p>
-
-<p>I enjoy <a href="https://digitalocean.com">digitalocean</a> for cloud hosting.
-Here is <a href="https://m.do.co/c/4604523c7997">my referal link</a> if you want to
-get $10 for free.</p>
-
-<p>My favorite joke is
-<a href="https://twitter.com/nixcraft/statuses/774612618547834880">this piece from nixCraft</a>.
-You would get to know why if you have read
-<a href="/devops/2016/09/02/first-time-screwing-up-remote-server.html">this post</a>.</p>
-
-<p></br></p>
-
-<h1>About the Blog</h1>
-
-<p>This blog is powered by Jekyll on Github pages, which means I can
-write simple markdown for my blog posts. But markdown is not as
-fully featured as HTML as it trades features for simplicity.</p>
-
-<p>As this blog is my very first attempt at blogging, I could experiment
-a lot of things on this blog without notifying anyone; for example, a
-permanent link that worked today might break tomorrow. I am really
-sorry for the inconvience caused.</p>
-
-<p></br></p>
-
-<h1>About the Title</h1>
-
-<p>The world is functional while I am not.</p>
+<p>Strace-mode is a emacs major mode for syntax highlighting output from
+<code>strace</code> command on linux. You can download the package from melpa,
+also checkout the repo <a href="https://github.com/pkmoore/strace-mode">here</a>.</p>
 
   </article>
+
+  <div>
+    <h3><strong><em>Comments</em></strong></h3>
+    <div>
+      Want to leave a comment? Write your comment
+      <a href="https://github.com/colinxy/colinxy.github.io/issues/">here</a>.
+    </div>
+    <div id="comments"></div>
+  </div>
+
+  <script type="text/javascript">
+
+   var commentIssueId = ;
+   /* console.log(commentIssueId);*/
+
+   function formatComment(user, userUrl, avatar, date, commentUrl, body) {
+     /* header */
+     var commentHeaderAvatar = document.createElement("span");
+     commentHeaderAvatar.innerHTML = "<img src='" + avatar +
+                                     "' width='20' height='20'>";
+     var usr = document.createElement("strong"); /* user */
+     usr.innerHTML = user;
+     var commentHeaderUser = document.createElement("a"); /* user div */
+     commentHeaderUser.className = "comment-header-user";
+     commentHeaderUser.href = userUrl;
+     commentHeaderUser.appendChild(usr);
+     var dat = document.createElement("a"); /* date */
+     dat.href = commentUrl;
+     dat.innerHTML = date;
+     var commentHeaderDate = document.createElement("span"); /* date div */
+     commentHeaderDate.appendChild(dat);
+
+     var commentHeader = document.createElement("div");
+     commentHeader.className = "comment-header";
+     commentHeader.appendChild(commentHeaderAvatar);
+     commentHeader.appendChild(commentHeaderUser);
+     commentHeader.appendChild(commentHeaderDate);
+
+     /* body */
+     var commentBody = document.createElement("div");
+     commentBody.className = "comment-body";
+     commentBody.innerHTML = body;
+
+     /* comment (header + body) */
+     var comment = document.createElement("div");
+     comment.className = "comment";
+     comment.appendChild(commentHeader);
+     comment.appendChild(commentBody);
+
+     return comment;
+   }
+
+   if (commentIssueId) {
+     console.log("loading comments...");
+
+     var url = "https://api.github.com/repos/colinxy/colinxy.github.io/issues/" +
+               commentIssueId + "/comments";
+
+     var request = new XMLHttpRequest();
+     request.onload = function() {
+       var response = JSON.parse(request.responseText);
+       /* console.log(response);*/
+       var comments = document.getElementById("comments");
+
+       for ( var i = 0; i < response.length; i++) {
+         var user = response[i].user.login;
+         var userUrl = response[i].user.html_url;
+         var avatar = response[i].user.avatar_url;
+         var date = new Date(response[i].updated_at).toDateString();
+         var commentUrl = response[i].html_url;
+         var body = response[i].body_html;
+
+         comments.appendChild(formatComment(user, userUrl, avatar,
+                                            date, commentUrl, body));
+       }
+     };
+     request.error = function() {
+       console.log("error loading comments");
+     };
+
+     request.open('GET', url, true);
+     request.setRequestHeader("Accept", "application/vnd.github.v3.html+json");
+     request.send();
+   }
+  </script>
 
 </div>
 
