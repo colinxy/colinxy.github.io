@@ -10,7 +10,7 @@ About Me
 This is primarily my technical blog, but you will see some
 nontechnical ones under the label `random-thoughts`.
 
-I don't really like posting very personal things online. But if you
+I don't really like posting personal things online. But if you
 want to know me, just send me an email. I will be more than happy to
 respond to it.
 
