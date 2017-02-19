@@ -40,6 +40,7 @@ git checkout source -- "$SITE"  # blog content on source branch
 # generate site by moving lifting everything in $SITE to blog root level
 find "$SITE" -maxdepth 1 ! -name 'reveal.js' ! -path "$SITE" -exec mv {} . \;
 
+rm -rf "$SITE/reveal.js"
 rmdir "$SITE"
 
 echo
