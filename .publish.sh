@@ -22,7 +22,7 @@ echo "currently on '$branch' branch"
 
 
 # cleanup, keep only $KEEP in master branch
-KEEP=".git .gitignore .nojekyll README.md .publish.sh reveal.js"
+KEEP=".git .gitignore .gitmodules .nojekyll README.md .publish.sh reveal.js"
 
 printf '\033[0;36m==>\033[0;00m '
 echo "clear site, keep only $KEEP"
