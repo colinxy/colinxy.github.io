@@ -1,6 +1,6 @@
 ---
 layout: revealjs
-title:  Emacs Workshop (Complete Version, 48 slides)
+title:  Emacs Workshop
 date:   2017-02-17
 categories: computer-science
 theme: moon

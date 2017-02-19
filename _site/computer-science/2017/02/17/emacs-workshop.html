@@ -1,13 +1,42 @@
----
-layout: revealjs
-title:  Emacs Workshop
-date:   2017-02-18
-categories: computer-science
-theme: moon
----
+<!-- -*- engine:liquid -*- -->
+<!DOCTYPE html>
+<html>
 
+  <!-- refer to https://github.com/hakimel/reveal.js#markdown
+       for markdown specific settings -->
 
-<style>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Emacs Workshop</title>
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="/res/favicon.jpg">
+
+    <link rel="stylesheet" href="/reveal.js/css/reveal.css">
+
+    
+      <link rel="stylesheet" href="/reveal.js/css/theme/moon.css">
+    
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/reveal.js/lib/css/zenburn.css">
+
+    <script>
+     /* export to pdf: https://github.com/hakimel/reveal.js/tree/master#print-stylesheet */
+     var link = document.createElement( 'link' );
+     link.rel = 'stylesheet';
+     link.type = 'text/css';
+     link.href = window.location.search.match( /print-pdf/gi ) ? '/reveal.js/css/print/pdf.css' : '/reveal.js/css/print/paper.css';
+     document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <div class="slides">
+        <style>
 code { background: #3f3f3f; }
 </style>
 
@@ -25,7 +54,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -37,7 +65,6 @@ Linux User Group @ UCLA
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -58,7 +85,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -71,10 +97,12 @@ Linux User Group @ UCLA
    - Meta key in iTerm2
      - Preference -> Profiles -> Keys:
        Left option key acts as `+Esc`
+   - Meta key in Terminal.app
+     - Preference -> Profile -> keyboard:
+       Use option as Meta key
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -92,7 +120,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -109,7 +136,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -117,7 +143,6 @@ Linux User Group @ UCLA
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -128,7 +153,6 @@ Linux User Group @ UCLA
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -146,7 +170,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -159,7 +182,6 @@ Linux User Group @ UCLA
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -174,7 +196,6 @@ Linux User Group @ UCLA
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -191,7 +212,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -204,12 +224,11 @@ Linux User Group @ UCLA
    - `M-f`: Forward *word*
    - `M-b`: Backward *word*
  - buffer
-   - `M->`: end of buffer
+   - `M->`: beginning of buffer
    - `M-<`: end of buffer
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -230,7 +249,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -247,7 +265,6 @@ Linux User Group @ UCLA
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -268,7 +285,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -284,7 +300,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -293,12 +308,11 @@ Linux User Group @ UCLA
  - `C-x 0`: *close* the active window
  - `C-x 1`: *close* all windows except the active window
  - `C-x 2`: *split* the active window vertically into two
- - `C-x 3`: *split* the active window vertically into two
+ - `C-x 3`: *split* the active window horizontally into two
  - `C-x o`: *change* the active window to another
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -307,10 +321,10 @@ Linux User Group @ UCLA
 
  - `C-x b`: switch buffer
  - `C-x C-b`: show buffer list
+ - `C-x k`: kill buffer
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -328,7 +342,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -336,7 +349,6 @@ Linux User Group @ UCLA
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -355,7 +367,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -373,7 +384,6 @@ Linux User Group @ UCLA
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -398,30 +408,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
-<section data-markdown>
-<script type="text/template">
-
-### Backup Files
-
- - if you don't want backup files to clutter your current directory,
-   add the following to your config file
- - backup files will be saved under `~/.saves` directory
-   with version numbers
-
-```lisp
-(setq backup-directory-alist '(("." . "~/.saves"))
-      backup-by-copying t
-      delete-old-versions t
-      kept-new-versions 10
-      kept-old-versions 2
-      version-control t)
-```
-
-</script>
-</section>
-
-
 <section data-markdown>
 <script type="text/template">
 
@@ -445,7 +431,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -461,7 +446,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -475,7 +459,6 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -488,6 +471,27 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+<section data-markdown>
+<script type="text/template">
+
+### Backup Files
+
+ - if you don't want backup files to clutter your current directory,
+   add the following to your config file
+ - backup files will be saved under `~/.saves` directory
+   with version numbers
+
+```lisp
+(setq backup-directory-alist '(("." . "~/.saves"))
+      backup-by-copying t
+      delete-old-versions t
+      kept-new-versions 10
+      kept-old-versions 2
+      version-control t)
+```
+
+</script>
+</section>
 
 <section data-markdown>
 <script type="text/template">
@@ -511,17 +515,15 @@ Linux User Group @ UCLA
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
-### Create keybindings
+### Creating keybindings
 
 http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -532,7 +534,6 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -545,10 +546,10 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
  - web (HTML/CSS)
  - Javascript
  - Markdown
+ - AND A LOT MORE!
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -557,7 +558,6 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -576,7 +576,6 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -594,26 +593,24 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
 ### Tramp: Editing Remote Files
 
  - use the same keys as open file `C-x C-f`
- - enter the filename as `/ssh:name@lnxsrv.seas.ucla.edu:cs111/test.c`
+ - enter the filename as `/ssh:name@lnxsrv.seas.ucla.edu:filename`
  - edit as normal file
  - make tramp respect remote `$PATH` variable,
    add the following config
 
- ```lisp
- (with-eval-after-load 'tramp
-   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
- ```
+```lisp
+(with-eval-after-load 'tramp
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+```
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -622,7 +619,6 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -645,7 +641,6 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -663,31 +658,31 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
-### Auto Completion
+### Auto Completion: [company-mode](https://company-mode.github.io/)
 
- - [company-mode](https://company-mode.github.io/)
-   - company stands for COMPlete ANYthing
-   - can complete multiple languages
-     - pluggable back-ends and front-ends
-   - install with package manager
+ - company stands for COMPlete ANYthing
+ - can complete multiple languages
+ - pluggable back-ends and front-ends
+ - install with package manager
+   - `M-x package-install RET company RET`
+ - configure company-mode: add the following config
+ ```lisp
+ (setq company-dabbrev-downcase nil)
+ (setq company-idle-delay 0)
+ (add-hook 'after-init-hook 'global-company-mode)
+ ```
 
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
-### Auto Completion: company mode
+### Auto Completion: [company-mode](https://company-mode.github.io/)
 
- - configure company-mode: add the following config
- ```lisp
- (add-hook 'after-init-hook 'global-company-mode)
- ```
  - completion will start after you type 3 characters
    - after the completion popup appears
    - `M-p`: previous candidate
@@ -698,6 +693,23 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
+<section data-markdown>
+<script type="text/template">
+
+### Fuzzy Auto Completion: [company-flx](https://github.com/PythonNut/company-flx)
+
+ - completion with fuzzy matching
+ - install with package manager
+   - `M-x package-install RET company-flx RET`
+ - add the following config
+
+```lisp
+(with-eval-after-load 'company
+  (company-flx-mode +1))
+```
+
+</script>
+</section>
 
 <section data-markdown>
 <script type="text/template">
@@ -706,6 +718,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
  - directory tree like NerdTree for Vim
  - install from melpa with package manager
+   - `M-x package-install RET neotree RET`
  - add the following config
  ```lisp
  (global-set-key (kbd "<f8>") 'neotree-toggle)
@@ -715,7 +728,6 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -728,7 +740,6 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
-
 
 <section data-markdown>
 <script type="text/template">
@@ -749,7 +760,6 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -763,7 +773,6 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
-
 <section data-markdown>
 <script type="text/template">
 
@@ -771,3 +780,33 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
+
+      </div>
+    </div>
+
+    <!-- To load these dependencies, reveal.js requires head.js (a script loading library) to be loaded before reveal.js -->
+    <script src="/reveal.js/lib/js/head.min.js"></script>
+    <script src="/reveal.js/js/reveal.js"></script>
+    <script>
+     Reveal.initialize({
+       slideNumber: true,
+
+       markdown: {
+         smartypants: true
+       },
+
+       /* https://github.com/hakimel/reveal.js#configuration */
+       dependencies: [
+         // Interpret Markdown in <section> elements
+         { src: '/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+         { src: '/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+
+         // Syntax highlight for <code> elements
+         { src: '/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+
+       ]
+     });
+    </script>
+  </body>
+
+</html>
