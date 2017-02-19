@@ -1,6 +1,6 @@
 ---
 layout: revealjs
-title:  Emacs Workshop (Complete Version, 47 slides)
+title:  Emacs Workshop (Complete Version, 48 slides)
 date:   2017-02-17
 categories: computer-science
 theme: moon
@@ -71,6 +71,9 @@ Linux User Group @ UCLA
    - Meta key in iTerm2
      - Preference -> Profiles -> Keys:
        Left option key acts as `+Esc`
+   - Meta key in Terminal.app
+     - Preference -> Profile -> keyboard:
+       Use option as Meta key
 
 </script>
 </section>
@@ -204,7 +207,7 @@ Linux User Group @ UCLA
    - `M-f`: Forward *word*
    - `M-b`: Backward *word*
  - buffer
-   - `M->`: end of buffer
+   - `M->`: beginning of buffer
    - `M-<`: end of buffer
 
 </script>
@@ -293,7 +296,7 @@ Linux User Group @ UCLA
  - `C-x 0`: *close* the active window
  - `C-x 1`: *close* all windows except the active window
  - `C-x 2`: *split* the active window vertically into two
- - `C-x 3`: *split* the active window vertically into two
+ - `C-x 3`: *split* the active window horizontally into two
  - `C-x o`: *change* the active window to another
 
 </script>
@@ -307,6 +310,7 @@ Linux User Group @ UCLA
 
  - `C-x b`: switch buffer
  - `C-x C-b`: show buffer list
+ - `C-x k`: kill buffer
 
 </script>
 </section>
@@ -402,29 +406,6 @@ Linux User Group @ UCLA
 <section data-markdown>
 <script type="text/template">
 
-### Backup Files
-
- - if you don't want backup files to clutter your current directory,
-   add the following to your config file
- - backup files will be saved under `~/.saves` directory
-   with version numbers
-
-```lisp
-(setq backup-directory-alist '(("." . "~/.saves"))
-      backup-by-copying t
-      delete-old-versions t
-      kept-new-versions 10
-      kept-old-versions 2
-      version-control t)
-```
-
-</script>
-</section>
-
-
-<section data-markdown>
-<script type="text/template">
-
 ### Smooth Scrolling
 
 ```lisp
@@ -492,6 +473,29 @@ Linux User Group @ UCLA
 <section data-markdown>
 <script type="text/template">
 
+### Backup Files
+
+ - if you don't want backup files to clutter your current directory,
+   add the following to your config file
+ - backup files will be saved under `~/.saves` directory
+   with version numbers
+
+```lisp
+(setq backup-directory-alist '(("." . "~/.saves"))
+      backup-by-copying t
+      delete-old-versions t
+      kept-new-versions 10
+      kept-old-versions 2
+      version-control t)
+```
+
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+
 ### Ido Mode
 
  - interactively do things
@@ -515,7 +519,7 @@ Linux User Group @ UCLA
 <section data-markdown>
 <script type="text/template">
 
-### Create keybindings
+### Creating keybindings
 
 http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
@@ -545,6 +549,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
  - web (HTML/CSS)
  - Javascript
  - Markdown
+ - AND A LOT MORE!
 
 </script>
 </section>
@@ -601,15 +606,15 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 ### Tramp: Editing Remote Files
 
  - use the same keys as open file `C-x C-f`
- - enter the filename as `/ssh:name@lnxsrv.seas.ucla.edu:cs111/test.c`
+ - enter the filename as `/ssh:name@lnxsrv.seas.ucla.edu:filename`
  - edit as normal file
  - make tramp respect remote `$PATH` variable,
    add the following config
 
- ```lisp
- (with-eval-after-load 'tramp
-   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
- ```
+```lisp
+(with-eval-after-load 'tramp
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+```
 
 </script>
 </section>
@@ -667,13 +672,19 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 <section data-markdown>
 <script type="text/template">
 
-### Auto Completion
+### Auto Completion: [company-mode](https://company-mode.github.io/)
 
- - [company-mode](https://company-mode.github.io/)
-   - company stands for COMPlete ANYthing
-   - can complete multiple languages
-     - pluggable back-ends and front-ends
-   - install with package manager
+ - company stands for COMPlete ANYthing
+ - can complete multiple languages
+ - pluggable back-ends and front-ends
+ - install with package manager
+   - `M-x package-install RET company RET`
+ - configure company-mode: add the following config
+ ```lisp
+ (setq company-dabbrev-downcase nil)
+ (setq company-idle-delay 0)
+ (add-hook 'after-init-hook 'global-company-mode)
+ ```
 
 </script>
 </section>
@@ -682,12 +693,8 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 <section data-markdown>
 <script type="text/template">
 
-### Auto Completion: company mode
+### Auto Completion: [company-mode](https://company-mode.github.io/)
 
- - configure company-mode: add the following config
- ```lisp
- (add-hook 'after-init-hook 'global-company-mode)
- ```
  - completion will start after you type 3 characters
    - after the completion popup appears
    - `M-p`: previous candidate
@@ -702,10 +709,30 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 <section data-markdown>
 <script type="text/template">
 
+### Fuzzy Auto Completion: [company-flx](https://github.com/PythonNut/company-flx)
+
+ - completion with fuzzy matching
+ - install with package manager
+   - `M-x package-install RET company-flx RET`
+ - add the following config
+
+```lisp
+(with-eval-after-load 'company
+  (company-flx-mode +1))
+```
+
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+
 ### [Neotree](https://github.com/jaypei/emacs-neotree)
 
  - directory tree like NerdTree for Vim
  - install from melpa with package manager
+   - `M-x package-install RET neotree RET`
  - add the following config
  ```lisp
  (global-set-key (kbd "<f8>") 'neotree-toggle)
