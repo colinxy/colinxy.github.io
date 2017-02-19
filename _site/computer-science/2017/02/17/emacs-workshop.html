@@ -346,7 +346,7 @@ Linux User Group @ UCLA
  - configuration is written in Emacs Lisp, a Lisp dialet
    - S-Expression (*sexp*): balanced expression (parentheses)
    - comment starts with `;`
-   - by convention, comments that starts from
+   - by convention, comments that goes from
      beginning of line starts with `;; `
 
 </script>
@@ -378,19 +378,14 @@ Linux User Group @ UCLA
 ```lisp
 ;; disbale startup messages
 (setq inhibit-startup-message t)
-
 ;; substitute y-or-n-p for yes-or-no-p
 (defalias 'yes-or-no-p 'y-or-n-p)
-
 ;; do not blink cursor
 (blink-cursor-mode -1)
-
 ;; use DEL to delete selected text
 (delete-selection-mode 1)
-
 ;; highlight region when mark is active
 (transient-mark-mode 1)
-
 ;; visualize matching parens
 (show-paren-mode 1)
 ```
@@ -405,7 +400,8 @@ Linux User Group @ UCLA
 
  - if you don't want backup files to clutter your current directory,
    add the following to your config file
- - backup files will be saved to `~/.saves` with version numbers
+ - backup files will be saved under `~/.saves` directory
+   with version numbers
 
 ```lisp
 (setq backup-directory-alist '(("." . "~/.saves"))
@@ -514,6 +510,31 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 <section data-markdown>
 <script type="text/template">
 
+### Builtin Customization Interface
+
+ - `M-x customize`
+
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+
+### Programming Language Specific Customization
+
+ - Lisp
+ - C/C++
+ - Python
+ - web (HTML/CSS)
+ - Javascript
+ - Markdown
+
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+
 ## Additional Text Editing Modes
 
 </script>
@@ -524,13 +545,31 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 ### Dired: directory editor
 
+ - special mode for file management
+ - `C-x d` to launch dired
+ - In dired
+   - `RET`: open file or directory
+   - `d`: mark file for deletion, then hit `x` to delete
+   - `v`: view file
+     - in that viewed file, use `q` to go back to dired
+   - `q`: quit dired
+
 </script>
 </section>
 
 <section data-markdown>
 <script type="text/template">
 
-### Dired: directory editor
+### More Dired: directory editor
+
+ - `C`: copy file
+ - `R`: rename/move file
+ - `g`: update dired buffer
+ - marking and batch processing
+   - `m`: mark file
+   - `u`: unmark file
+   - `U`: unmark all files
+   - `% m`: mark file by regexp
 
 </script>
 </section>
@@ -539,6 +578,17 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 <script type="text/template">
 
 ### Tramp: Editing Remote Files
+
+ - use the same keys as open file `C-x C-f`
+ - enter the filename as `/ssh:name@lnxsrv.seas.ucla.edu:cs111/test.c`
+ - edit as normal file
+ - make tramp respect remote `$PATH` variable,
+   add the following config
+
+ ```lisp
+ (with-eval-after-load 'tramp
+   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+ ```
 
 </script>
 </section>
@@ -557,7 +607,8 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 ### package.el
 
  - builtin package manager since Emacs 24
- - put the following configuration at the *beginning* of your config file
+ - put the following configuration at the
+   <em style="color: crimson">BEGINNING</em> of your config file
 
 ```lisp
 (setq package-enable-at-startup nil)
@@ -576,13 +627,14 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 ### package.el
 
+ - either of the following works
  - `M-x package-list-packages`
-   - find the package you want to install
-   - goto beginning of the line with `C-a`
+   - find the package you want to install (put the cursor on that line)
    - hit `i`, then `x`
    - wait for the package to be installed
  - `M-x package-install`
    - enter the name of the package, then hit `RET`
+   - wait for the package to be installed
 
 </script>
 </section>
@@ -596,7 +648,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
    - company stands for COMPlete ANYthing
    - can complete multiple languages
      - pluggable back-ends and front-ends
-   - install with package.el
+   - install with package manager
 
 </script>
 </section>
@@ -606,14 +658,33 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 ### Auto Completion: company mode
 
- - configure company-mode
-   - `(add-hook 'after-init-hook 'global-company-mode)`
+ - configure company-mode: add the following config
+ ```lisp
+ (add-hook 'after-init-hook 'global-company-mode)
+ ```
  - completion will start after you type 3 characters
    - after the completion popup appears
    - `M-p`: previous candidate
    - `M-n`: next candidate
    - `<return>`: complete with current candidate
    - `<tab>`: complete common parts
+
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+
+### [Neotree](https://github.com/jaypei/emacs-neotree)
+
+ - directory tree like NerdTree for Vim
+ - install from melpa with package manager
+ - add the following config
+ ```lisp
+ (global-set-key (kbd "<f8>") 'neotree-toggle)
+ ```
+
+ - use `<f8>` to open/close neotree
 
 </script>
 </section>
@@ -635,13 +706,11 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 ## Stuff That We Did Not Talk About
 
- - emacs starter kit
-   - [prelude](https://github.com/bbatsov/prelude):
-     enhance the default Emacs experience
- - using builtin customization interface
- - [helm](https://github.com/emacs-helm/helm)
-  - [magit](https://magit.vc/): A Git Porcelain inside Emacs
- - language specific customization
+ - [spacemacs](http://spacemacs.org/): better configured emacs
+ - [helm](https://github.com/emacs-helm/helm):
+   incremental completion & selection narrowing
+ - [flycheck](http://www.flycheck.org/en/latest/): on-the-fly syntax checking
+ - [magit](https://magit.vc/): A Git Porcelain inside Emacs
  - [pdf-tools](https://github.com/politza/pdf-tools): view/edit pdf
  - [org-mode](http://orgmode.org/): keeping notes, TODO list, ...
  - [AUCTeX](https://www.gnu.org/software/auctex/): edit/preview LaTeX
@@ -659,6 +728,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
  - builtin help
  - http://ergoemacs.org/emacs/emacs.html
  - http://www.jesshamrick.com/2012/09/10/absolute-beginners-guide-to-emacs/
+ - http://www.jesshamrick.com/2012/09/18/emacs-as-a-python-ide/
 
 </script>
 </section>
