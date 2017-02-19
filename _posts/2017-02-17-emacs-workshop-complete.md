@@ -48,7 +48,9 @@ Linux User Group @ UCLA
  - Emacs on seasnet server, use `lnxsrv06`, `lnxsrv07`, `lnxsrv09`
    - add this line to your ~/.bash_profile
 
- `export PATH=/usr/local/cs/bin:$PATH`
+ ```sh
+ export PATH=/usr/local/cs/bin:$PATH
+ ```
 
  - Linux should just work
    - install Emacs 25 on Ubuntu
@@ -83,7 +85,9 @@ Linux User Group @ UCLA
    - [Install on Windows](https://www.gnu.org/software/emacs/download.html#windows)
    - Windows bash issues
    - ssh into sesnet server: PuTTY xterm-256color
-     - `export TERM=xterm-256color`
+   ```sh
+   export TERM=xterm-256color
+   ```
 
 </script>
 </section>
@@ -493,13 +497,16 @@ Linux User Group @ UCLA
  - interactively do things
    - useful for opening files and switching buffers
 
-```lisp
-;; enable interactively do things (ido)
-(require 'ido)
-(ido-mode 1)
-(setq ido-enable-flex-matching t)
-(ido-everywhere t)
-```
+ ```lisp
+ ;; enable interactively do things (ido)
+ (require 'ido)
+ (ido-mode 1)
+ (setq ido-enable-flex-matching t)
+ (ido-everywhere t)
+ ```
+
+ - activates on `C-x b`, `C-x C-f`, etc
+ - use `C-f` in minibuffer to cancel completion
 
 </script>
 </section>

@@ -1,42 +1,13 @@
-<!-- -*- engine:liquid -*- -->
-<!DOCTYPE html>
-<html>
+---
+layout: revealjs
+title:  Emacs Workshop
+date:   2017-02-18
+categories: computer-science
+theme: moon
+---
 
-  <!-- refer to https://github.com/hakimel/reveal.js#markdown
-       for markdown specific settings -->
 
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width initial-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Emacs Workshop (Complete Version, 47 slides)</title>
-    <meta name="description" content="">
-    <link rel="shortcut icon" href="/res/favicon.jpg">
-
-    <link rel="stylesheet" href="/reveal.js/css/reveal.css">
-
-    
-      <link rel="stylesheet" href="/reveal.js/css/theme/moon.css">
-    
-
-    <!-- For syntax highlighting -->
-    <link rel="stylesheet" href="/reveal.js/lib/css/zenburn.css">
-
-    <script>
-     /* export to pdf: https://github.com/hakimel/reveal.js/tree/master#print-stylesheet */
-     var link = document.createElement( 'link' );
-     link.rel = 'stylesheet';
-     link.type = 'text/css';
-     link.href = window.location.search.match( /print-pdf/gi ) ? '/reveal.js/css/print/pdf.css' : '/reveal.js/css/print/paper.css';
-     document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-  </head>
-
-  <body>
-
-    <div class="reveal">
-      <div class="slides">
-        <style>
+<style>
 code { background: #3f3f3f; }
 </style>
 
@@ -54,6 +25,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -65,6 +37,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -85,6 +58,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -100,6 +74,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -117,6 +92,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -133,6 +109,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -140,6 +117,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -150,6 +128,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -167,6 +146,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -179,6 +159,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -194,6 +175,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -208,6 +190,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -226,6 +209,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -246,6 +230,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -262,6 +247,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -282,6 +268,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -297,6 +284,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -311,6 +299,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -321,6 +310,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -338,6 +328,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -345,6 +336,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -363,6 +355,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -380,6 +373,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -404,6 +398,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -425,6 +420,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -449,6 +445,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -464,6 +461,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -477,6 +475,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -488,6 +487,7 @@ Linux User Group @ UCLA
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -511,6 +511,7 @@ Linux User Group @ UCLA
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -521,6 +522,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -530,6 +532,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -546,6 +549,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -553,6 +557,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -571,6 +576,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -587,6 +593,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -607,6 +614,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -614,6 +622,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -636,6 +645,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -653,6 +663,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -666,6 +677,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -686,6 +698,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -703,6 +716,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -714,6 +728,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
+
 
 <section data-markdown>
 <script type="text/template">
@@ -734,6 +749,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -747,6 +763,7 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 </script>
 </section>
 
+
 <section data-markdown>
 <script type="text/template">
 
@@ -754,33 +771,3 @@ http://ergoemacs.org/emacs/keyboard_shortcuts.html
 
 </script>
 </section>
-
-      </div>
-    </div>
-
-    <!-- To load these dependencies, reveal.js requires head.js (a script loading library) to be loaded before reveal.js -->
-    <script src="/reveal.js/lib/js/head.min.js"></script>
-    <script src="/reveal.js/js/reveal.js"></script>
-    <script>
-     Reveal.initialize({
-       slideNumber: true,
-
-       markdown: {
-         smartypants: true
-       },
-
-       /* https://github.com/hakimel/reveal.js#configuration */
-       dependencies: [
-         // Interpret Markdown in <section> elements
-         { src: '/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-         { src: '/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-
-         // Syntax highlight for <code> elements
-         { src: '/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-
-       ]
-     });
-    </script>
-  </body>
-
-</html>
