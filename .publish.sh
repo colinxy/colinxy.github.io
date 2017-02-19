@@ -26,7 +26,7 @@ KEEP=".git .gitignore .gitmodules .nojekyll README.md .publish.sh reveal.js"
 
 printf '\033[0;36m==>\033[0;00m '
 echo "clear site, keep only $KEEP"
-find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.gitignore' \
+find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.gitignore' ! -name '.gitmodules' \
     ! -name '.nojekyll' ! -name 'README.md' ! -name '.publish.sh' \
     ! -name 'reveal.js' -exec rm -r {} \;
 # respect reveal.js submodule
