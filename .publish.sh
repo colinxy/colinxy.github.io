@@ -22,11 +22,13 @@ echo "currently on '$branch' branch"
 
 
 # cleanup, keep only $KEEP in master branch
-KEEP=".git .gitignore .nojekyll README.md .publish.sh"
+KEEP=".git .gitignore .nojekyll README.md .publish.sh reveal.js"
 
 printf '\033[0;36m==>\033[0;00m '
 echo "clear site, keep only $KEEP"
-find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.gitignore' ! -name '.nojekyll' ! -name 'README.md' ! -name '.publish.sh'  -exec rm -r {} \;
+find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.gitignore' \
+    ! -name '.nojekyll' ! -name 'README.md' ! -name '.publish.sh' \
+    ! -name 'reveal.js' -exec rm -r {} \;
 
 # checkout site from source branch
 SITE=_site
