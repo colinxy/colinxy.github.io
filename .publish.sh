@@ -29,6 +29,7 @@ echo "clear site, keep only $KEEP"
 find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.gitignore' \
     ! -name '.nojekyll' ! -name 'README.md' ! -name '.publish.sh' \
     ! -name 'reveal.js' -exec rm -r {} \;
+# respect reveal.js submodule
 
 # checkout site from source branch
 SITE=_site
@@ -40,6 +41,7 @@ git checkout source -- "$SITE"  # blog content on source branch
 # generate site by moving lifting everything in $SITE to blog root level
 find "$SITE" -maxdepth 1 ! -name 'reveal.js' ! -path "$SITE" -exec mv {} . \;
 
+# respect reveal.js submodule
 rm -rf "$SITE/reveal.js"
 rmdir "$SITE"
 
