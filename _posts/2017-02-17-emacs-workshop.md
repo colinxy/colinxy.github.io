@@ -277,7 +277,9 @@ Linux User Group @ UCLA
 
 ### More Editing Within Buffer
 
+ - `C-d`: delete *character* forward
  - `DEL`: delete *character* backward
+ - `M-d`: kill (cut) *word* forward
  - `M-DEL`: kill (cut) *word* backward
  - `C-k`: kill (cut) *line*
  - `M-y`: yank (paste) previously-killed text,
@@ -451,6 +453,8 @@ Linux User Group @ UCLA
 ```lisp
 ;; do not indent with tabs
 (setq-default indent-tabs-mode nil)
+;; indent with 4 spaces
+(setq-default c-basic-offset 4)
 ```
 
 </script>
