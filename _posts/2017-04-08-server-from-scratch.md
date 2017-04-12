@@ -31,6 +31,8 @@ Linux User Group @ UCLA
 
 ## HTTP
 
+Colin Yang
+
 </script>
 </section>
 
@@ -52,7 +54,7 @@ Linux User Group @ UCLA
 ## HTTP sits on top of TCP
 
  - TCP guarantees reliable and ordered transfer of data
- - reading from TCP stream is like reading from a file from local hard disk
+ - reading from TCP stream is like reading a file from local hard disk
 
 </script>
 </section>
@@ -154,7 +156,7 @@ Via: 1.1 vegur
 
  - Both request and response have headers
  - `Host`: specifying the hostname
- - `User-Agent`: program for
+ - `User-Agent`: program making the request
  - `Location`: used for redirection
  - `Content-Type`: MIME type (ignore this term)
  - and A LOT more
@@ -259,6 +261,8 @@ HTTP/1.1 200 OK
 <script type="text/template">
 
 ## Setting Up a Web Server ##
+
+David Nguyen
 
 </script>
 </section>
