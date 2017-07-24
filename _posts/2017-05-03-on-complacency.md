@@ -3,7 +3,7 @@ layout: post
 title:  On Complacency
 Date:   2017-05-03
 categories: random-thoughts
-commentIssueId:
+commentIssueId: 15
 ---
 
 

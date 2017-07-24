@@ -212,9 +212,9 @@ which ignores `SIGINT` entirely.
 3815  rt_sigaction(SIGINT, {SIG_IGN, [], SA_RESTORER, 0x7fb0a7f93250}, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, 8) = 0
 ```
 
-Now I found the culprit, it' bash! Bash inserted multiple signal
-handlers after we forked, and that's why `SIGINT` cannot the `./sig`
-program.
+Now I found the culprit, it's bash! Bash inserted multiple signal
+handlers after we forked, and that's why `SIGINT` cannot terminates
+the `./sig` program.
 
 So If I want to restore default `SIGINT` handler to my program, I just
 need to add `signal(SIGINT, SIG_DFL);` to the top of the main function

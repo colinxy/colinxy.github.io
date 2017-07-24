@@ -103,7 +103,7 @@ Now I add this line of code to my `.emacs`, and problem solved! Though
 good proctice might add it though `custom-set-variables`.
 
 ```elisp
-(setf epa-pinentry-mode 'loopback)
+(setq epa-pinentry-mode 'loopback)
 ```
 
 A caveat if you are a Mac OS X user like I am, is that `brew install
