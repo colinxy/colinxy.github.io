@@ -218,7 +218,7 @@ Via: 1.1 vegur
 ## Let's make raw HTTP requests by hand
 
 ```
-$ ncat google.com 80
+$ ncat --crlf google.com 80
 GET / HTTP/1.1
 Host: google.com
 
@@ -228,7 +228,7 @@ Location: http://www.google.com/
 ```
 
 ```
-$ ncat --ssl google.com 443  # --ssl for HTTPS
+$ ncat --crlf --ssl google.com 443  # --ssl for HTTPS
 GET / HTTP/1.1
 Host: www.google.com
 

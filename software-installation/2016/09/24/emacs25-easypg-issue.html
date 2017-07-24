@@ -154,7 +154,7 @@ perfect desired behavior.</p>
 
 <p>Now I add this line of code to my <code>.emacs</code>, and problem solved! Though
 good proctice might add it though <code>custom-set-variables</code>.</p>
-<div class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="p">(</span><span class="nb">setf</span> <span class="nv">epa-pinentry-mode</span> <span class="ss">'loopback</span><span class="p">)</span>
+<div class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="p">(</span><span class="k">setq</span> <span class="nv">epa-pinentry-mode</span> <span class="ss">'loopback</span><span class="p">)</span>
 </code></pre></div>
 <p>A caveat if you are a Mac OS X user like I am, is that <code>brew install
 gnupg2</code> would only install GnuPG 2.0, but not GnuPG 2.1. To install
