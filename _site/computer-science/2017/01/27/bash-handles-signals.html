@@ -255,7 +255,7 @@ which ignores <code>SIGINT</code> entirely.</p>
 <div class="highlight"><pre><code class="language-" data-lang="">3815  rt_sigaction(SIGINT, {SIG_IGN, [], SA_RESTORER, 0x7fb0a7f93250}, {SIG_DFL, [], SA_RESTORER, 0x7fb0a7f93250}, 8) = 0
 </code></pre></div>
 <p>Now I found the culprit, it&#39;s bash! Bash inserted multiple signal
-handlers after we forked, and that&#39;s why <code>SIGINT</code> cannot terminates
+handlers after we forked, and that&#39;s why <code>SIGINT</code> cannot terminate
 the <code>./sig</code> program.</p>
 
 <p>So If I want to restore default <code>SIGINT</code> handler to my program, I just

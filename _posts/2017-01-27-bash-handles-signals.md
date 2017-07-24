@@ -213,7 +213,7 @@ which ignores `SIGINT` entirely.
 ```
 
 Now I found the culprit, it's bash! Bash inserted multiple signal
-handlers after we forked, and that's why `SIGINT` cannot terminates
+handlers after we forked, and that's why `SIGINT` cannot terminate
 the `./sig` program.
 
 So If I want to restore default `SIGINT` handler to my program, I just
