@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Fun with Raw Packets</title>
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="/computer-science/2017/11/18/fun-with-raw-packets.html">
+
+    <link rel="shortcut icon" href="/res/favicon.jpg">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Mutable State</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/links/">Links</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/preferences/">Preferences</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Fun with Raw Packets</h1>
+    <p class="post-meta">Nov 18, 2017</p>
+  </header>
+
+  <article class="post-content">
+    <p>I came across this awesome Python package
+<a href="https://github.com/secdev/scapy/"><code>scapy</code></a> through Julia Evans&#39; blog
+<a href="https://jvns.ca/blog/2013/10/31/day-20-scapy-and-traceroute/">post</a>.
+I will talk about my (debugging) experience of sending a simple http
+request in raw packets.
+I will be using the python3 port of the same package
+<a href="https://github.com/phaethon/scapy">here</a>.</p>
+
+<p>So our goal is to send a http request to Google and get a response
+back.  We will only use ip layer APIs, even though <code>scapy</code> has APIs for
+sending even lower layer packets i.e. link layer.</p>
+
+<p>Normally when we were to use syscall to send and receive packets, we
+operate above transport layer. The process is roughly the following
+for tcp and udp.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">fd &lt;- socket: with socket type SOCK_STREAM for tcp, SOCK_DGRAM for udp.
+
+for TCP:
+connect: tcp 3-way handshake
+send: (sendto could also be used)
+recv: (recvfrom could also be used)
+
+for UDP:
+sendto
+recvfrom
+
+In the end
+close: cleanup
+</code></pre></div>
+<p>I guess scapy people implement this through creating a socket with
+<code>SOCK_RAW</code> socket type. This allows us to speak at a lower level, or
+even implement a different protocol.
+However this will require root privileges or <code>CAP_NET_RAW</code>
+<a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">capabilities(7)</a>.
+You can observe this through the <code>ping</code> program, which is either a
+setuid binary owned by root, or has <code>CAP_NET_RAW</code> capabilities enabled
+on some Linux distributions. So all code example below should be run
+with root privileges.</p>
+
+<p>To achieve our goal, let&#39;s start with writing a simple DNS query.
+With scapy, we can clearly see the structure of a packet. Higher level
+packets get encapsulated in a lower level packet. And this case, DNS
+query (application layer) gets encapsulated in a UDP packet
+(transport layer), and the UDP packet gets encapsulated in a IP packet
+(network layer).
+The <code>sr1</code> function in scapy sends our packet and receives only
+the first answer.</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">scapy.all</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">dns_query</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">dnsserver</span><span class="o">=</span><span class="s">'8.8.8.8'</span><span class="p">):</span>
+    <span class="c"># rd: recursion desired</span>
+    <span class="n">dns</span> <span class="o">=</span> <span class="n">IP</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">dnsserver</span><span class="p">)</span> <span class="o">/</span> <span class="n">UDP</span><span class="p">()</span> <span class="o">/</span> <span class="n">DNS</span><span class="p">(</span><span class="n">rd</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">qd</span><span class="o">=</span><span class="n">DNSQR</span><span class="p">(</span><span class="n">qname</span><span class="o">=</span><span class="n">hostname</span><span class="p">))</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">sr1</span><span class="p">(</span><span class="n">dns</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">answer</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">answer</span><span class="p">[</span><span class="n">DNS</span><span class="p">]</span><span class="o">.</span><span class="n">an</span><span class="o">.</span><span class="n">rdata</span>
+    <span class="k">return</span> <span class="n">ip</span>
+</code></pre></div>
+<p>This experiment turns out to be uneventful. Below are the outputs.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">In [1]: ip = dns_query('google.com')
+Begin emission:
+.................................................................Finished to send 1 packets.
+........................................................................................................................*
+Received 186 packets, got 1 answers, remaining 0 packets
+IP / UDP / DNS Ans "'172.217.4.142'"
+
+In [2]: ip
+Out[2]: '172.217.4.142'
+</code></pre></div>
+<p>As a retrospection, this worked so well because dns queries were
+designed to be small in size and thus can fit within one ip packet
+comfortably. This also fits the fire-and-forget philosophy of
+UDP.</p>
+
+<p>Now onto HTTP request. Similar to DNS, but we need to implement tcp
+3-way handshake by ourselves. We do that by sending a packet with
+<code>SYN</code> flag on and after that we send another packet with <code>ACK</code> flag on
+to ack our peer&#39;s <code>SYN</code>. (There is a bug in this program. I will
+present the correct version at the end.)</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">scapy.all</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c"># do NOT copy and paste, there is a bug</span>
+<span class="k">def</span> <span class="nf">http</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">dport</span><span class="o">=</span><span class="mi">80</span><span class="p">):</span>
+    <span class="n">sport</span> <span class="o">=</span> <span class="n">RandNum</span><span class="p">(</span><span class="mi">1025</span><span class="p">,</span> <span class="mi">65535</span><span class="p">)</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="n">RandInt</span><span class="p">()</span>
+    <span class="c"># ip_pkt = IP(dst=ip, id=0)</span>
+    <span class="n">syn</span> <span class="o">=</span> <span class="n">IP</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">ip</span><span class="p">)</span> <span class="o">/</span> <span class="n">TCP</span><span class="p">(</span><span class="n">dport</span><span class="o">=</span><span class="n">dport</span><span class="p">,</span> <span class="n">sport</span><span class="o">=</span><span class="n">sport</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="s">'S'</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="n">seq</span><span class="p">)</span>
+    <span class="n">synack</span> <span class="o">=</span> <span class="n">sr1</span><span class="p">(</span><span class="n">syn</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">synack</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+    <span class="n">seq</span> <span class="o">=</span> <span class="n">synack</span><span class="p">[</span><span class="n">TCP</span><span class="p">]</span><span class="o">.</span><span class="n">ack</span>
+    <span class="n">ack</span> <span class="o">=</span> <span class="n">synack</span><span class="p">[</span><span class="n">TCP</span><span class="p">]</span><span class="o">.</span><span class="n">seq</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">request</span> <span class="o">=</span> <span class="n">IP</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">ip</span><span class="p">)</span> <span class="o">/</span> <span class="n">TCP</span><span class="p">(</span><span class="n">dport</span><span class="o">=</span><span class="n">dport</span><span class="p">,</span> <span class="n">sport</span><span class="o">=</span><span class="n">sport</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="s">'A'</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="n">seq</span><span class="p">,</span> <span class="n">ack</span><span class="o">=</span><span class="n">ack</span><span class="p">)</span> <span class="o">/</span> <span class="n">Raw</span><span class="p">(</span><span class="n">ensure_bytes</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
+    <span class="n">ans</span><span class="p">,</span> <span class="n">unans</span> <span class="o">=</span> <span class="n">sr</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">ans</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">ans</span>
+</code></pre></div>
+<p>The above code is able to get a <code>ACK</code> from server, but cannot get
+response for the payload. So we use <code>tcpdump</code> to investigate what is
+going on here. Below is the <code>tcpdump</code> output.
+I ran the experiment from my Linux virtual machine, and that&#39;s why you
+can see private ip addresses here.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">$ sudo tcpdump -nnttttvv port 80
+tcpdump: listening on enp0s3, link-type EN10MB (Ethernet), capture size 262144 bytes
+2017-11-11 22:41:07.868697 IP (tos 0x0, ttl 64, id 1, offset 0, flags [none], proto TCP (6), length 40)
+    10.0.2.15.10979 &gt; 172.217.11.174.80: Flags [S], cksum 0x53e2 (correct), seq 628762301, win 8192, length 0
+2017-11-11 22:41:07.879954 IP (tos 0x0, ttl 64, id 7659, offset 0, flags [none], proto TCP (6), length 44)
+    172.217.11.174.80 &gt; 10.0.2.15.10979: Flags [S.], cksum 0xf51b (correct), seq 2969024001, ack 628762302, win 65535, options [mss 1460], length 0
+2017-11-11 22:41:07.879978 IP (tos 0x0, ttl 64, id 28975, offset 0, flags [DF], proto TCP (6), length 40)
+    10.0.2.15.10979 &gt; 172.217.11.174.80: Flags [R], cksum 0x73df (correct), seq 628762302, win 0, length 0
+2017-11-11 22:41:07.934721 IP (tos 0x0, ttl 64, id 1, offset 0, flags [none], proto TCP (6), length 76)
+    10.0.2.15.5909 &gt; 172.217.11.174.80: Flags [.], cksum 0x3dc7 (correct), seq 628762302:628762338, ack 2969024002, win 8192, length 36: HTTP, length: 36
+        GET / HTTP/1.1
+        Host: google.com
+
+2017-11-11 22:41:07.935864 IP (tos 0x0, ttl 255, id 7686, offset 0, flags [none], proto TCP (6), length 40)
+    172.217.11.174.80 &gt; 10.0.2.15.5909: Flags [R], cksum 0x6ceb (correct), seq 2969024002, win 0, length 0
+</code></pre></div>
+<p>There are also a few relevant stackoverflow questions that addresses
+this issue.</p>
+
+<p><a href="https://stackoverflow.com/questions/37683026/how-to-create-http-get-request-scapy">https://stackoverflow.com/questions/37683026/how-to-create-http-get-request-scapy</a>
+<a href="https://stackoverflow.com/questions/9058052/unwanted-rst-tcp-packet-with-scapy">https://stackoverflow.com/questions/9058052/unwanted-rst-tcp-packet-with-scapy</a></p>
+
+<p>And indeed, I had the same situation as them. We can observe from the
+3rd packet from the above output:
+<code>10.0.2.15.10979 &gt; 172.217.11.174.80: Flags [R]</code>.
+A tcp packet with <code>RESET</code> flag on was sent to the remote host, and
+this ruins all our efforts.
+But clearly, we didn&#39;t send it ourselves, so the obvious culprit is
+the kernel.</p>
+
+<blockquote>
+<p>Essentially, the problem is that scapy runs in user space, and the
+linux kernel will receive the SYN-ACK first. The kernel will send a
+RST because it won&#39;t have a socket open on the port number in
+question, before you have a chance to do anything with scapy.</p>
+</blockquote>
+
+<p>The above stackoverflow answer sums it up perfectly. We should tell
+the kernel to hand of during our little experiment.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">sudo iptables -A OUTPUT -p tcp --tcp-flags RST RST -s 10.0.2.15 -j DROP
+</code></pre></div>
+<p>Verify the iptables change with <code>sudo iptables -n -L -v</code>. Also don&#39;t
+forget to flush this rule change at the end of the experiment with
+<code>sudo iptables -F</code> (this flushes all rules).</p>
+
+<p>However, setting the iptables rule still don&#39;t solve the problem for me.
+This time I am getting a tcp reset from the server side.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">$ sudo tcpdump -nnttttvv port 80
+tcpdump: listening on enp0s3, link-type EN10MB (Ethernet), capture size 262144 bytes
+2017-11-12 01:53:19.796344 IP (tos 0x0, ttl 64, id 1, offset 0, flags [none], proto TCP (6), length 40)
+    10.0.2.15.46928 &gt; 172.217.11.174.80: Flags [S], cksum 0x0700 (correct), seq 326367544, win 8192, length 0
+2017-11-12 01:53:19.805356 IP (tos 0x0, ttl 64, id 15419, offset 0, flags [none], proto TCP (6), length 44)
+    172.217.11.174.80 &gt; 10.0.2.15.46928: Flags [S.], cksum 0xed36 (correct), seq 133896705, ack 326367545, win 65535, options [mss 1460], length 0
+2017-11-12 01:53:19.847819 IP (tos 0x0, ttl 64, id 1, offset 0, flags [none], proto TCP (6), length 76)
+    10.0.2.15.51483 &gt; 172.217.11.174.80: Flags [.], cksum 0x1049 (correct), seq 326367545:326367581, ack 133896706, win 8192, length 36: HTTP, length: 36
+        GET / HTTP/1.1
+        Host: google.com
+
+2017-11-12 01:53:19.847905 IP (tos 0x0, ttl 255, id 15445, offset 0, flags [none], proto TCP (6), length 40)
+    172.217.11.174.80 &gt; 10.0.2.15.51483: Flags [R], cksum 0xffe1 (correct), seq 133896706, win 0, length 0
+
+...
+</code></pre></div>
+<p>Initially, I wondered if my packet was in any way noncompliant, since
+I combined ACK packet with my initial GET request. I also wondered if
+the PSH flag needs to be set Or if Google is blocking my
+request. However, this is unlikely since after the tcp reset, it tried
+to reconnect by sending more <code>SYNACK</code> packets.</p>
+
+<p>It turns out, the bug was a simple one. Our <code>ACK</code> packet was sent from
+a different port than the original <code>SYN</code> packet, no wonder we get tcp
+resets.</p>
+<div class="highlight"><pre><code class="language-" data-lang="">10.0.2.15.46928 &gt; 172.217.11.174.80: Flags [S]
+172.217.11.174.80 &gt; 10.0.2.15.46928: Flags [S.]
+10.0.2.15.51483 &gt; 172.217.11.174.80: Flags [.]
+172.217.11.174.80 &gt; 10.0.2.15.51483: Flags [R]
+</code></pre></div>
+<p>Further debugging shows that the issue is in my misuse of <code>RandNum</code>
+api, which generates a random number, when used for each request.  So
+all I needed to do was to change <code>RandNum(1025, 65535)</code> to
+<code>int(RandNum(1025, 65535))</code> for the above code, and we are good to go.</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">scapy.all</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">http</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">dport</span><span class="o">=</span><span class="mi">80</span><span class="p">):</span>
+    <span class="n">sport</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">RandNum</span><span class="p">(</span><span class="mi">1025</span><span class="p">,</span> <span class="mi">65535</span><span class="p">))</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="n">RandInt</span><span class="p">()</span>
+    <span class="c"># ip_pkt = IP(dst=ip, id=0)</span>
+    <span class="n">syn</span> <span class="o">=</span> <span class="n">IP</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">ip</span><span class="p">)</span> <span class="o">/</span> <span class="n">TCP</span><span class="p">(</span><span class="n">dport</span><span class="o">=</span><span class="n">dport</span><span class="p">,</span> <span class="n">sport</span><span class="o">=</span><span class="n">sport</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="s">'S'</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="n">seq</span><span class="p">)</span>
+    <span class="n">synack</span> <span class="o">=</span> <span class="n">sr1</span><span class="p">(</span><span class="n">syn</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">synack</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+    <span class="n">seq</span> <span class="o">=</span> <span class="n">synack</span><span class="p">[</span><span class="n">TCP</span><span class="p">]</span><span class="o">.</span><span class="n">ack</span>
+    <span class="n">ack</span> <span class="o">=</span> <span class="n">synack</span><span class="p">[</span><span class="n">TCP</span><span class="p">]</span><span class="o">.</span><span class="n">seq</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">request</span> <span class="o">=</span> <span class="n">IP</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">ip</span><span class="p">)</span> <span class="o">/</span> <span class="n">TCP</span><span class="p">(</span><span class="n">dport</span><span class="o">=</span><span class="n">dport</span><span class="p">,</span> <span class="n">sport</span><span class="o">=</span><span class="n">sport</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="s">'A'</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="n">seq</span><span class="p">,</span> <span class="n">ack</span><span class="o">=</span><span class="n">ack</span><span class="p">)</span> <span class="o">/</span> <span class="n">Raw</span><span class="p">(</span><span class="n">ensure_bytes</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
+    <span class="n">ans</span><span class="p">,</span> <span class="n">unans</span> <span class="o">=</span> <span class="n">sr</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">ans</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">ans</span>
+</code></pre></div>
+<p>However, the above code only gets the first packet from the server.
+This normally only contains the <code>ACK</code> packet with no data.
+To actually get the full http response, we need to use <code>sniff</code>
+function from scapy, but that&#39;s beyond the scope of this post.</p>
+
+  </article>
+
+  <div>
+    <h3><strong><em>Comments</em></strong></h3>
+    <div>
+      Want to leave a comment? Write your comment
+      <a href="https://github.com/colinxy/colinxy.github.io/issues/16">here</a>.
+    </div>
+    <div id="comments"></div>
+  </div>
+
+  <script type="text/javascript">
+
+   var commentIssueId = 16;
+   /* console.log(commentIssueId);*/
+
+   function formatComment(user, userUrl, avatar, date, commentUrl, body) {
+     /* header */
+     var commentHeaderAvatar = document.createElement("span");
+     commentHeaderAvatar.innerHTML = "<img src='" + avatar +
+                                     "' width='20' height='20'>";
+     var usr = document.createElement("strong"); /* user */
+     usr.innerHTML = user;
+     var commentHeaderUser = document.createElement("a"); /* user div */
+     commentHeaderUser.className = "comment-header-user";
+     commentHeaderUser.href = userUrl;
+     commentHeaderUser.appendChild(usr);
+     var dat = document.createElement("a"); /* date */
+     dat.href = commentUrl;
+     dat.innerHTML = date;
+     var commentHeaderDate = document.createElement("span"); /* date div */
+     commentHeaderDate.appendChild(dat);
+
+     var commentHeader = document.createElement("div");
+     commentHeader.className = "comment-header";
+     commentHeader.appendChild(commentHeaderAvatar);
+     commentHeader.appendChild(commentHeaderUser);
+     commentHeader.appendChild(commentHeaderDate);
+
+     /* body */
+     var commentBody = document.createElement("div");
+     commentBody.className = "comment-body";
+     commentBody.innerHTML = body;
+
+     /* comment (header + body) */
+     var comment = document.createElement("div");
+     comment.className = "comment";
+     comment.appendChild(commentHeader);
+     comment.appendChild(commentBody);
+
+     return comment;
+   }
+
+   if (commentIssueId) {
+     console.log("loading comments...");
+
+     var url = "https://api.github.com/repos/colinxy/colinxy.github.io/issues/" +
+               commentIssueId + "/comments";
+
+     var request = new XMLHttpRequest();
+     request.onload = function() {
+       var response = JSON.parse(request.responseText);
+       /* console.log(response);*/
+       var comments = document.getElementById("comments");
+
+       for ( var i = 0; i < response.length; i++) {
+         var user = response[i].user.login;
+         var userUrl = response[i].user.html_url;
+         var avatar = response[i].user.avatar_url;
+         var date = new Date(response[i].updated_at).toDateString();
+         var commentUrl = response[i].html_url;
+         var body = response[i].body_html;
+
+         comments.appendChild(formatComment(user, userUrl, avatar,
+                                            date, commentUrl, body));
+       }
+     };
+     request.error = function() {
+       console.log("error loading comments");
+     };
+
+     request.open('GET', url, true);
+     request.setRequestHeader("Accept", "application/vnd.github.v3.html+json");
+     request.send();
+   }
+  </script>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Mutable State</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>Mutable State</li>
+          <li><a href="mailto:colinxy@linux.ucla.edu">email</a></li>
+        </ul>
+      </div>
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a target="_blank" href="https://github.com/colinxy">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">colinxy</span>
+            </a>
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Powered by <a target="_blank" href="http://jekyllrb.com/">Jekyll</a>
+            and <a target="_blank" href="https://github.com/">Github</a>
+        </p>
+        <p class="text">All content and <a target="_blank" href="https://github.com/colinxy/colinxy.github.io">source code</a>
+          are released under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Common License</a>.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
