@@ -7,15 +7,20 @@ commentIssueId: 5
 ---
 
 
-*Update 2016-1-30:*
+*Update 2016-01-30:*
 
 I realized that the link to a another blog is no longer
 working, and that some of the content may not be explained
 clearly. I will try to address these issues with future update.
 
-*Update 2016-4-11:*
+*Update 2016-04-11:*
 
 Some of the wordings have been fixed and the links are working.
+
+*Update 2018-07-19:*
+
+Fix links and add inline $\LaTeX$ instructions. The article was written
+before I knew how to do a lot more cool stuff with $\LaTeX$.
 
 <br>
 
@@ -75,6 +80,7 @@ markdown: redcarpet
 
 - 2. include the MathJax library. In this case, you
      have to use HTML tags, add the following line at the end of the markdown file.
+     You can also add inline $\LaTeX$ support by following instructions here: <https://tex.stackexchange.com/questions/27633/mathjax-inline-mode-not-rendering>.
 
 ```
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -88,7 +94,16 @@ can be rendered as
 $$ \\int e^{- x^{2}}\\, dx $$
 </div>
 
-Please go to my [source code](https://github.com/colinxy/colinxy.github.io/blob/master/_posts/2015-11-08-print-math-beatifully.md)
+Please go to my [source code](https://github.com/colinxy/colinxy.github.io/blob/source/_posts/2015-11-08-print-math-beautifully.md)
 to see how it is actually done.
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+  }
+});
+</script>
 
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
