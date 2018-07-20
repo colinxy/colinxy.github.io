@@ -137,10 +137,10 @@ articles are great references that you should checkout.</p>
 
 <p>Then I compile the program with gcc, and run it in bash
 interactively, in which case everything works perfectly.</p>
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gcc sig.c
-<span class="nv">$ </span>./a.out &amp;
+<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>gcc sig.c
+<span class="gp">$ </span>./a.out &amp;
 <span class="o">[</span>1] 3218
-<span class="nv">$ </span><span class="nb">kill</span> <span class="nt">-TERM</span> 3209
+<span class="gp">$ </span><span class="nb">kill</span> -TERM 3209
 SIGTERM caught
 <span class="o">[</span>1]+  Done                    ./a.out
 </code></pre></div>
@@ -148,10 +148,10 @@ SIGTERM caught
 and exit normally when I send <code>SIGTERM</code> to it. Also the program did
 ignore <code>SIGHUP</code>, and was interrupted on <code>SIGINT</code>, which I did not
 handle, shown as follows.</p>
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>./a.out &amp;
+<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>./a.out &amp;
 <span class="o">[</span>1] 3209
-<span class="nv">$ </span><span class="nb">kill</span> <span class="nt">-HUP</span> 3209
-<span class="nv">$ </span><span class="nb">kill</span> <span class="nt">-INT</span> 3209
+<span class="gp">$ </span><span class="nb">kill</span> -HUP 3209
+<span class="gp">$ </span><span class="nb">kill</span> -INT 3209
 <span class="o">[</span>1]+  Interrupt               ./a.out
 </code></pre></div>
 <h2>Bash Driver Script</h2>
@@ -160,7 +160,7 @@ handle, shown as follows.</p>
 happened.</p>
 <div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="c">#!/bin/bash</span>
 
-<span class="nb">set</span> <span class="nt">-e</span>
+<span class="nb">set</span> -e
 
 ./sig &amp;
 <span class="nv">pid</span><span class="o">=</span><span class="nv">$!</span>
@@ -170,21 +170,21 @@ happened.</p>
 sleep 1
 <span class="nb">echo</span> <span class="s2">"send SIGHUP to process </span><span class="nv">$pid</span><span class="s2">"</span>
 <span class="c"># send SIGHUP to process</span>
-<span class="nb">kill</span> <span class="nt">-HUP</span> <span class="nv">$pid</span> <span class="o">||</span> <span class="nb">exit </span>1
+<span class="nb">kill</span> -HUP <span class="nv">$pid</span> <span class="o">||</span> <span class="nb">exit </span>1
 <span class="c"># signal propagation might take time</span>
 sleep 1
 <span class="c"># check whether process is still alive</span>
-<span class="nb">kill</span> <span class="nt">-0</span> <span class="nv">$pid</span> <span class="o">||</span> <span class="nb">exit </span>1
+<span class="nb">kill</span> -0 <span class="nv">$pid</span> <span class="o">||</span> <span class="nb">exit </span>1
 
 <span class="c"># process should still be alive since we ignored SIGHUP</span>
 
 <span class="nb">echo</span> <span class="s2">"send SIGINT to process </span><span class="nv">$pid</span><span class="s2">"</span>
 <span class="c"># send SIGINT to process</span>
-<span class="nb">kill</span> <span class="nt">-INT</span> <span class="nv">$pid</span> <span class="o">||</span> <span class="nb">exit </span>1
+<span class="nb">kill</span> -INT <span class="nv">$pid</span> <span class="o">||</span> <span class="nb">exit </span>1
 <span class="c"># signal propagation might take time</span>
 sleep 1
 <span class="c"># check whether process is still alive</span>
-<span class="nb">kill</span> <span class="nt">-0</span> <span class="nv">$pid</span> <span class="o">&amp;&amp;</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">"process </span><span class="nv">$pid</span><span class="s2"> still alive"</span><span class="p">;</span> <span class="o">}</span>
+<span class="nb">kill</span> -0 <span class="nv">$pid</span> <span class="o">&amp;&amp;</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">"process </span><span class="nv">$pid</span><span class="s2"> still alive"</span>; <span class="o">}</span>
 </code></pre></div>
 <p>Some explanation:</p>
 
@@ -226,7 +226,7 @@ the process. So what happened here?</p>
 <a href="http://man7.org/linux/man-pages/man1/strace.1.html">strace(1)</a>.
 <code>strace</code> traces system calls and signals and print it in a quite human
 readable format. It&#39;s even more readable than my source code!</p>
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>strace <span class="nt">-f</span> <span class="nt">-b</span> execve <span class="nt">-o</span> sig.strace ./sig.sh
+<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>strace -f -b execve -o sig.strace ./sig.sh
 </code></pre></div>
 <p><code>-f</code> option makes <code>strace</code> trace child process of <code>./sig.sh</code> process
 as well. <code>-b execve</code> makes <code>strace</code> detach from traced process when
